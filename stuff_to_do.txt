@@ -26,4 +26,6 @@ log
         represent a mapping as a transformation matrix
         Formula to change basis of transformation matrix
 
-            
+    we probably wont be able to implement all of this, but we will see.
+    we also will have to forge ahead in the book, so this stuff is questionable
+    
