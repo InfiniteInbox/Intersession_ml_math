@@ -1,0 +1,15 @@
+log
+
+1.3.23:
+
+    we will need to begin the code as well as start studying the rest of the book. 
+
+    I already have a repo with some stuff on matrices (https://github.com/iai9/matrices), so that will be a valuable asset.
+    we will have to expand upon this in order to represent what we have learned from the book
+
+    as of right now:
+
+        will need to represent a vector
+        Make an object or smth to represent Groups
+        Can expand on above to represent vector space 
+        (unsure of how to represent the )
