@@ -243,10 +243,19 @@ def rref(matrix):
     mindim = min(len(matrix), len(matrix[0]))
 
     for idx in reversed(range(mindim)):
-        if matrix[idx][idx] == 1:
+        # print(idx)
+        if matrix[idx][idx] == 1.0:
             for idx2 in reversed(range(idx)):
-                print(f'{idx}, {idx2}')
+                # print("\t" + str(idx2))
+                print()
+                scalar = matrix[idx2][idx]
+                subtractant = row_by_scalar(matrix[idx], scalar)
+                row_to_sub_from = matrix[idx2]
+                subbed_row = subtract_row(row_to_sub_from, subtractant)
     
+                matrix[idx] = subbed_row
+    
+    return matrix
 
 def identify_pivots(matrix):
 
