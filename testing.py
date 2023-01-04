@@ -33,13 +33,8 @@ class genset:
 
         return [self.gset[i] for i in holder]
     def get_rank(self):
-        tempgset = self.gset
-
-        if self.columned == False:
-            tempgset = mp.transpose(tempgset)
-        
-        holder = mp.identify_pivots(tempgset)
-        return len(holder)
+        temp = self.gset
+        return mp.rank(temp)
         
 
     

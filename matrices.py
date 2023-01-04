@@ -236,7 +236,6 @@ def ref(matrix):
     return matrix
 
     # O(n**2)
-
 def rref(matrix):
 
     matrix = ref(matrix)
@@ -255,6 +254,9 @@ def rref(matrix):
                 matrix[idx2] = subbed_row
     
     return matrix
+
+def rank(matrix):
+    return len(identify_pivots(matrix))
 
 def identify_pivots(matrix):
 
