@@ -49,7 +49,11 @@ class genset:
 # print(g.get_rank())
 
 a = [
-    [94,3,9],
-    [24,7,18],
-    [38,2,10]
+    [94,3,9,2,5,1],
+    [24,7,18,6,3,2],
+    [38,2,10,6,7,8]
 ]
+
+g = mp.mround(mp.rref(a))
+
+print(mp.identify_pivots(g))
