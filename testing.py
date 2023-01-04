@@ -4,15 +4,13 @@
 
 # we will need to go from a list of row vectors to column vectors
 
+import matrices as mp
 
-def get_col(matrix_2d, _index):
+a = [[1,0,4],[12,0,3],[1,0,4]]
 
-    return list(row[_index] for row in matrix_2d) # O(n) this simply grabs the column from the specified index. 
+a = mp.echelon(a)
+print(a)
 
-def transpose(matrix):
-
-    new_array = [get_col(matrix, i) for i in range(len(matrix[0]))] # O(n) and nested O(n), becomes O(n**2). takes a column and makes it a row
-    return new_array
 
 # will make a class:
 

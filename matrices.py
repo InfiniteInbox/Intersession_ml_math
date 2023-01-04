@@ -221,6 +221,17 @@ def echelon(matrix):
     return matrix
     # Full time: O(n**3)
 
+def ref(matrix):
+    
+    matrix = echelon(matrix)
+
+    for idx, row in enumerate(matrix):
+        matrix[idx] = row_by_scalar(row, (1/row[idx]))
+    
+    return matrix
+
+    # O(n**2)
+
 def matrix_det(matrix, _istriangle = False):
 
     if isinstance(_istriangle, bool): # makes sure _istriangle is a boolean
@@ -425,3 +436,13 @@ def multiply_matrix(matrix1, matrix2):
         arguments are incompatible and cannot be multiplied")
     
     # full time O(n**3)
+
+def mround(matrix, places=2):
+
+    for idx, row in enumerate(matrix):
+        for idx2, column in enumerate(row):
+            matrix[idx][idx2] = round(column, places)
+
+    return matrix
+
+   # O(n**2)
