@@ -240,9 +240,12 @@ def ref(matrix):
 def rref(matrix):
 
     matrix = ref(matrix)
+    mindim = min(len(matrix), len(matrix[0]))
 
+    for idx in reversed(range(mindim)):
+        if matrix[idx][idx] == 1:
+        
     
-
 
 def identify_pivots(matrix):
 
