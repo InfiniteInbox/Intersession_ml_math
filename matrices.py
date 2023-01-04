@@ -237,6 +237,13 @@ def ref(matrix):
 
     # O(n**2)
 
+def rref(matrix):
+
+    matrix = ref(matrix)
+
+    
+
+
 def identify_pivots(matrix):
 
     # identifies the pivot columns of the matrix
