@@ -225,12 +225,39 @@ def ref(matrix):
     
     matrix = echelon(matrix)
 
+    mindim = min(len(matrix), len(matrix[0])) - 1
+
     for idx, row in enumerate(matrix):
-        matrix[idx] = row_by_scalar(row, (1/row[idx]))
-    
+        if idx > mindim:
+            return matrix
+        if matrix[idx][idx] !=0:
+            matrix[idx] = row_by_scalar(row, (1/row[idx]))
+
     return matrix
 
     # O(n**2)
+
+def identify_pivots(matrix):
+
+    # identifies the pivot columns of the matrix
+
+    matrix = ref(matrix)
+
+    pivot_col_idx_list = []
+
+    matrix = transpose(matrix)
+    for idx, row in enumerate(matrix):
+        one_query = [row[idx]]
+        zero_query = list()
+        for col_idx in range(idx+1, len(row)):
+            zero_query.append(row[col_idx])
+    
+        if (one_query == [1]) and (all(x == 0.0 for x in zero_query) or not bool(zero_query)):
+            pivot_col_idx_list.append(idx)
+
+    return pivot_col_idx_list
+
+    # O(n**2) time
 
 def matrix_det(matrix, _istriangle = False):
 
