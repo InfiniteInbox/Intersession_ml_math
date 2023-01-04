@@ -244,7 +244,8 @@ def rref(matrix):
 
     for idx in reversed(range(mindim)):
         if matrix[idx][idx] == 1:
-            for idx in reversed(range())
+            for idx2 in reversed(range(idx)):
+                print(f'{idx}, {idx2}')
     
 
 def identify_pivots(matrix):
