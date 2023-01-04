@@ -32,6 +32,17 @@ class genset:
         print(holder)
 
         return [self.gset[i] for i in holder]
+    def get_rank(self):
+        tempgset = self.gset
+
+        if self.columned == False:
+            tempgset = mp.transpose(tempgset)
+        
+        holder = mp.identify_pivots(tempgset)
+        return len(holder)
+        
+
+    
 
 g = genset([[1,2,-1,-1,-1], [2,-1,1,2,-2], [3,-4,3,5,-3], [-1,8,-5,-6,1]])
 
