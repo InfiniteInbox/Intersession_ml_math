@@ -44,11 +44,12 @@ class genset:
 # print(g.get_rank())
 
 a = [
-    [94,3,9,2,5,1],
-    [24,7,18,6,3,2],
-    [38,2,10,6,7,8]
+    [94,3,9,6],
+    [24,7,18,6],
+    [38,2,10,12],
+    [5,2,3,1]
 ]
 
-g = mp.mround(mp.rref(a))
-
-print(mp.identify_pivots(g))
+n = mp.inverse(a)
+for row in n:
+    print(row)
