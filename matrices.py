@@ -432,10 +432,33 @@ def append_mat(mat1, mat2):
 
     if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]):
         for idx, row in enumerate(mat2):
-            mat1[idx] = mat1[idx].extend(row)
+            mat1[idx].extend(row)
 
     return mat1
-    
+
+def find_transition(og_base, new_base):
+
+    # going from base 1 to base 2
+    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
+
+        dim_to_take = len(og_base[0])
+        total = append_mat(new_base, og_base)
+        reduced = rref(total)
+
+        transition_matrix = list()
+
+        for row in reduced:
+            transition_matrix.append(row[-dim_to_take:])
+
+        return transition_matrix
+
+def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
+
+    transition1 = find_transition(tildab1, ogb1)
+    transition2 = inverse(find_transition(tildab2, ogb2))
+
+    return multiply_matrix(multiply_matrix(transition2, ogtransfmat), transition1)
+
 def multip_1row(row1, row2):
 
     '''
