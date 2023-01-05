@@ -428,6 +428,9 @@ def inverse(matrix):
 
     # full time: O(n**3)
 
+def reduce_augmented(mat1, mat2, operator="rref", inverse=False):
+    pass
+
 def multip_1row(row1, row2):
 
     '''
