@@ -431,7 +431,7 @@ def inverse(matrix):
 def append_mat(mat1, mat2):
 
     if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]):
-        for idx, row in enumerate(mat2)):
+        for idx, row in enumerate(mat2):
             mat1[idx] = mat1[idx].extend(row)
 
     return mat1
