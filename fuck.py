@@ -1,4 +1,4 @@
-
+import matrices as mp
 def basisisisisisisi(A1, B1, C1, B_new, C_new):
     def mat_mult(A, B, C):
         # Check that the matrices are compatible for multiplication
@@ -51,7 +51,10 @@ def basisisisisisisi(A1, B1, C1, B_new, C_new):
     Transform_mat_1 = row_reduce(B_new, B1)
     Transform_mat_2 = row_reduce(C_new, C1)
 
-    Final_result = mat_mult(inverse(Transform_mat_1) , A1, Transform_mat_2)
+    Final_result = mat_mult(mp.inverse(Transform_mat_1) , A1, Transform_mat_2)
+
+    return Final_result
+
 
 
 
