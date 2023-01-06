@@ -6,6 +6,12 @@
 #             print(f'{idx}, {idx2}')
 
 l = [0,1,2,3,4]
+l2 = [0,1,12,3,4,1]
+for i in l:
+    try:
+        print(l.index(i))
+    except ValueError:
+        continue
 
 # for i in range(len(l)):
 #     for j in l[i+1:]:

@@ -263,25 +263,24 @@ def identify_pivots(matrix):
     # identifies the pivot columns of the matrix
 
     matrix = ref(matrix)
-    mindim = min(len(matrix), len(matrix[0]))
 
     pivot_col_idx_list = []
+    for row in matrix:
+        try:
+            first_one = row.index(1)
+            for idx2 in range(first_one):
+                if row[idx2] != 0:
+                    continue
 
-    matrix = transpose(matrix)
-    for idx, row in enumerate(matrix):
-        if idx > mindim - 1:
-            break
-        one_query = [row[idx]]
-        zero_query = list()
-        for col_idx in range(idx+1, len(row)):
-            zero_query.append(row[col_idx])
-    
-        if (one_query == [1]) and (all(x == 0.0 for x in zero_query) or not bool(zero_query)):
-            pivot_col_idx_list.append(idx)
+            pivot_col_idx_list.append(first_one)
 
-    return pivot_col_idx_list
+        except:
+            continue 
+
+    return pivot_col_idx_list    
 
     # O(n**2) time
+
 
 def matrix_det(matrix, _istriangle = False):
 
@@ -428,7 +427,7 @@ def inverse(matrix):
 
     # full time: O(n**3)
 
-def append_mat(mat1, mat2):
+def append_mat_right(mat1, mat2):
 
     if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]):
         for idx, row in enumerate(mat2):
@@ -442,7 +441,7 @@ def find_transition(og_base, new_base):
     if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
 
         dim_to_take = len(og_base[0])
-        total = append_mat(new_base, og_base)
+        total = append_mat_right(new_base, og_base)
         reduced = rref(total)
 
         transition_matrix = list()
@@ -531,3 +530,19 @@ def mround(matrix, places=2):
 
    # O(n**2)
 
+def solve_homogeneous(coef_matrix):
+
+    coef_matrix = rref(coef_matrix)
+    print(rref(coef_matrix))
+    pivotcols = identify_pivots(coef_matrix)
+    print(pivotcols)
+    notpiv_cols = list()
+    for i in range(len(coef_matrix[0])):
+        if i not in pivotcols:
+            notpiv_cols.append(i)
+
+    return notpiv_cols
+
+a = [[1,3,0,0,3], [0,0,1,0,9], [0,0,0,1,-4]]
+
+# print(solve_homogeneous(a))

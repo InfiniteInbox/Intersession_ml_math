@@ -25,7 +25,9 @@ class LinearMapping:
 
   def __init__(self, A, B=None, mapping=None):
     self.domain_basis = [A[i] for i in mp.identify_pivots(mp.transpose(A))]
+    self.domain_dim = len(self.domain_basis)
     self.codomain_basis = [B[i] for i in mp.identify_pivots(mp.transpose(B))]
+    self.codomain_dim = len(self.codomain_basis)
     self.domain = [row[:] for row in A]
     self.codomain = [row[:] for row in B]
     self.mapping = mapping # needs to be a matrix or None
@@ -43,21 +45,14 @@ class LinearMapping:
   def apply_mapping(self, vector):
 
     # expects a vector in the domain, not codomain
+    # expects a vector in the domain, not codomain, of the form  vector = [element1, ...., element 2]
     # will then apply the linear mapping (self.mapping) to the vector
     # will return the result
-    return mp.multiply_matrix(self.mapping, mp.transpose([vector]))
+    if len(vector) != self.domain_dim:
+      return "hold up! wait a minute! sumn aint right"
 
-    # OLD ################## OLD
-    # Check that the input vector is in the correct domain
-    # if len(vector) != len(self.domain[0]):
-    #   raise ValueError("Vector has incorrect dimension for the specified domain")
-
-    # # Apply the linear mapping to the input vector
-    # result = [0 for _ in range(len(self.codomain[0]))]
-    # for i in range(len(self.matrix)):
-    #   for j in range(len(vector)):
-    #     result[i] += self.matrix[i][j] * vector[j]
-    # return result
+    else:
+      return mp.multiply_matrix(self.mapping, mp.transpose([vector]))
 
   def is_subspace(self, subspace):
       # check if subspace is a part of vector_space_1
@@ -74,39 +69,9 @@ class LinearMapping:
       return('it is a endomorphism')
     elif self.isomorphism:
       return('it is a homomoprhism')
-  '''
-  def is_homomorphism(self):
-      # check if the mapping preserve vector addition
-      for vector_1 in self.matrix:
-          for vector_2 in self.matrix1:
-              mapped_vector_1 = self.map(vector_1)
-              mapped_vector_2 = self.map(vector_2)
-              if mapped_vector_1 + mapped_vector_2 != self.map(vector_1 + vector_2):
-                  return False
-      return True
-
-  def is_isomorphism(self):
-      # check if the mapping is bijective and preserve vector addition
-      if not self.is_homomorphism():
-          return False
-
-        # check if the mapping is surjective
-      for vector in self.matrix1:
-          if vector not in self.map(self.matrix):
-              return False
-
-        # check if the mapping is injective
-      for i, vector_1 in enumerate(self.matrix):
-          for j, vector_2 in enumerate(self.matrix):
-              if i != j and self.map(vector_1) == self.map(vector_2):
-                  return False
-
-      return True
-
-  def is_endomorphism(self):
-      # check if the mapping is from a vector space to itself and preserve vector addition
-      return self.matrix == self.matrix1 and self.is_homomorphism()
-'''
+    
+    def find_kernel(self):
+      pass
 
 # Test the LinearMapping class
 # A = [[1, 2], [3, 4]]
@@ -117,4 +82,4 @@ class LinearMapping:
 # print(xd)
 # subspac1e = [1,2]
 # result = lm.apply_mapping(subspac1e)
-# print(result)  
+# print(result)
