@@ -12,8 +12,8 @@ class LinearMapping:
     self.bijective = True if (self.injective == True and self.surjective == True) else False
     self.homomorphism = True # (by definition, duh)
     self.isomorphism = True if (self.bijective == True) else False # homomorphism already satisfied
-    self.is_endomorphism  = None # True if dim(A) == dim(B) and len(A[0]) == len(B[0]) else False
-    self.is_  
+    self.endomorphism  = True if len(A) == len(B) and len(A[0]) == len(B[0]) else False # True if dim(A) == dim(B) and len(A[0]) == len(B[0]) else False
+    self.automorphism = True if self.endomorphism and self.bijective else False
 
   def map(self, vector):
         return self.apply(vector)
@@ -43,7 +43,16 @@ class LinearMapping:
           if vector not in self.matrix:
               return False
       return True
-
+  def typeofmapping(self):
+    if self.homomorphism:
+      return('it is a homomoprhism')
+    elif self.automorphism:
+      return('it is a automorphism')
+    elif self.endomorphism:
+      return('it is a endomorphism')
+    elif self.isomorphism:
+      return('it is a homomoprhism')
+  '''
   def is_homomorphism(self):
       # check if the mapping preserve vector addition
       for vector_1 in self.matrix:
@@ -75,12 +84,14 @@ class LinearMapping:
   def is_endomorphism(self):
       # check if the mapping is from a vector space to itself and preserve vector addition
       return self.matrix == self.matrix1 and self.is_homomorphism()
-
+'''
 # Test the LinearMapping class
 A = [[1, 2], [3, 4]]
 B = [[5, 6, 7], [8, 9, 10],[11, 12, 13]]
 C = [[1,3],[2,3],[2,4]]
 lm = LinearMapping(A, B, mapping=C)
+xd = lm.typeofmapping()
+print(xd)
 # subspac1e = [1,2]
 # result = lm.apply_mapping(subspac1e)
 # print(result)  
