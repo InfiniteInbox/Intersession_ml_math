@@ -32,9 +32,42 @@ class genset:
         print(holder)
 
         return [self.gset[i] for i in holder]
+
     def get_rank(self):
         temp = self.gset
         return mp.rank(temp)
+    
+def dot(v1, v2):
+
+    if not(isinstance(v1[0], list)) and not(isinstance(v2[0], list)) and (len(v1)==len(v2)):
+        total = 0
+        for idx in range(len(v1)):
+            total += v1[idx]*v2[idx]
+        
+        return total
+
+def isortho(v1,v2):
+
+    # inner op is dot product
+    if dot(v1,v2) == 0:
+        return True
+    else:
+        return False 
+
+def isorthonormal(basis, columned=False): 
+
+    # takes a matrix of matrices, where each inner matrix is a basis vector. assumed not columned, which ultimately is what we want for this
+
+    for idx, vec1 in enumerate(basis):
+        for vec2 in basis[idx+1:]:
+            if (dot(vec1, vec2) != 0) or (dot(vec1, vec1) != 1):
+                return False
+            
+    return True
+
+a = [[1,0,0], [0,1,0], [0,0,1]]
+
+print(isorthonormal(a))
         
 
     
@@ -57,10 +90,10 @@ class genset:
 # # h = mp.append_mat(b, a)
 # # h = mp.rref(h)
 
-a1 = [[1,2,0],[-1,1,3],[3,7,1],[-1,2,4]]
-b1 = [[1,0,0],[0,1,0],[0,0,1]]
-c1 = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
-b_new = [[1,0,1],[1,1,0],[0,1,1]]
-c_new = [[1,1,0,1],[1,0,1,0],[0,1,1,0],[0,0,0,1]]
+# a1 = [[1,2,0],[-1,1,3],[3,7,1],[-1,2,4]]
+# b1 = [[1,0,0],[0,1,0],[0,0,1]]
+# c1 = [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]
+# b_new = [[1,0,1],[1,1,0],[0,1,1]]
+# c_new = [[1,1,0,1],[1,0,1,0],[0,1,1,0],[0,0,0,1]]
 
-print(mp.change_transformation_basis(a1, b1, c1, b_new, c_new))
+# print(mp.change_transformation_basis(a1, b1, c1, b_new, c_new))
