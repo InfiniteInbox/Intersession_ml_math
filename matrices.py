@@ -533,16 +533,23 @@ def mround(matrix, places=2):
 def solve_homogeneous(coef_matrix):
 
     coef_matrix = rref(coef_matrix)
-    print(rref(coef_matrix))
     pivotcols = identify_pivots(coef_matrix)
-    print(pivotcols)
     notpiv_cols = list()
     for i in range(len(coef_matrix[0])):
         if i not in pivotcols:
             notpiv_cols.append(i)
 
-    return notpiv_cols
+    for idx in notpiv_cols:
+        coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) 
+    coef_matrix = transpose(coef_matrix    )
+    final = [coef_matrix[idx] for idx in notpiv_cols]
+    return final
+
+    
 
 a = [[1,3,0,0,3], [0,0,1,0,9], [0,0,0,1,-4]]
+print(solve_homogeneous(a))
 
-# print(solve_homogeneous(a))
+# a = [[1,2,-1,-1,-1], [2,-1,1,2,-2], [3,-4,3,5,-3], [-1,8,-5,-6,1]]
+# a = [[1,3,0,0,3], [0,0,1,0,9], [0,0,0,1,-4]]
+# print(identify_pivots(a))
