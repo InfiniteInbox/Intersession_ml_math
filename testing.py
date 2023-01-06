@@ -94,11 +94,21 @@ def project_vector(vector, proj_mat, return_error=False):
     else:
         return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
 
-a = [[1,1,1], [0,1,2]]
-psuba = find_projection_mat(a)
+# a = [[1,1,1], [0,1,2]]
+# psuba = find_projection_mat(a)
 
-print(project_vector([6,0,0], psuba, return_error = True))
+# print(project_vector([6,0,0], psuba, return_error = True))
 
+a = [
+    [3,2],
+    [1,4],
+    [2,4]    ]
+
+b = [
+    [1],
+    [2]]
+    
+print(mp.multiply_matrix(a, b))
     
 
 # g = genset([[1,2,-1,-1,-1], [2,-1,1,2,-2], [3,-4,3,5,-3], [-1,8,-5,-6,1]])

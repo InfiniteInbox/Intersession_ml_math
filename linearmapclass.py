@@ -1,4 +1,4 @@
-matrices
+import matrices as mp
 
 class LinearMapping:
   def __init__(self, A, B, mapping=None):
@@ -7,28 +7,38 @@ class LinearMapping:
     self.domain = [row[:] for row in A]
     self.codomain = [row[:] for row in B]
     self.mapping = mapping # needs to be a matrix or None
+    print(self.domain)
+    print(self.codomain)
 
   def map(self, vector):
         return self.apply(vector)
 
-  def apply(self, vector):
-    # Check that the input vector is in the correct domain
-    if len(vector) != len(self.domain[0]):
-      raise ValueError("Vector has incorrect dimension for the specified domain")
+  def apply_mapping(self, vector):
 
-    # Apply the linear mapping to the input vector
-    result = [0 for _ in range(len(self.codomain[0]))]
-    for i in range(len(self.matrix)):
-      for j in range(len(vector)):
-        result[i] += self.matrix[i][j] * vector[j]
-    return result
-    
+    # expects a vector in the domain, not codomain
+    # will then apply the linear mapping (self.mapping) to the vector
+    # will return the result
+    return mp.multiply_matrix(self.mapping, mp.transpose([vector]))
+
+    # OLD ################## OLD
+    # Check that the input vector is in the correct domain
+    # if len(vector) != len(self.domain[0]):
+    #   raise ValueError("Vector has incorrect dimension for the specified domain")
+
+    # # Apply the linear mapping to the input vector
+    # result = [0 for _ in range(len(self.codomain[0]))]
+    # for i in range(len(self.matrix)):
+    #   for j in range(len(vector)):
+    #     result[i] += self.matrix[i][j] * vector[j]
+    # return result
+
   def is_subspace(self, subspace):
       # check if subspace is a part of vector_space_1
       for vector in subspace:
           if vector not in self.matrix:
               return False
       return True
+
   def is_homomorphism(self):
       # check if the mapping preserve vector addition
       for vector_1 in self.matrix:
@@ -64,7 +74,8 @@ class LinearMapping:
 # Test the LinearMapping class
 A = [[1, 2], [3, 4]]
 B = [[5, 6, 7], [8, 9, 10],[11, 12, 13]]
-lm = LinearMapping(A, B)
-subspac1e = [1,2]
-result = lm.apply(subspac1e)
-print(result)  
+C = [[1,3],[2,3],[2,4]]
+lm = LinearMapping(A, B, mapping=C)
+# subspac1e = [1,2]
+# result = lm.apply_mapping(subspac1e)
+# print(result)  
