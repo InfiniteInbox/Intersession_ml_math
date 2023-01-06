@@ -1,9 +1,12 @@
+matrices
+
 class LinearMapping:
-  def __init__(self, A, B):
+  def __init__(self, A, B, mapping=None):
     self.matrix = A
     self.matrix1 = B
     self.domain = [row[:] for row in A]
     self.codomain = [row[:] for row in B]
+    self.mapping = mapping # needs to be a matrix or None
 
   def map(self, vector):
         return self.apply(vector)
@@ -19,6 +22,7 @@ class LinearMapping:
       for j in range(len(vector)):
         result[i] += self.matrix[i][j] * vector[j]
     return result
+    
   def is_subspace(self, subspace):
       # check if subspace is a part of vector_space_1
       for vector in subspace:

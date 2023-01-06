@@ -46,6 +46,10 @@ def dot(v1, v2):
         
         return total
 
+def euclidean_norm(vector):
+
+    return (dot(vector, vector))**(1/2)
+
 def isortho(v1,v2):
 
     # inner op is dot product
@@ -65,10 +69,35 @@ def isorthonormal(basis, columned=False):
             
     return True
 
-a = [[1,0,0], [0,1,0], [0,0,1]]
+def find_projection_mat(basis, columned=False):
 
-print(isorthonormal(a))
-        
+    # takes a basis, and assumes it is not columned. it must be columnbed for us to continue.
+
+    isortho = isorthonormal(basis)
+
+    if columned == False:
+        basis = mp.transpose(basis)
+    
+    if isortho:
+        return mp.multiply_matrix(basis, mp.transpose(basis))
+
+    else:
+        psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis))
+        return mp.multiply_matrix(basis, psueod_inv)
+
+def project_vector(vector, proj_mat, return_error=False):
+    
+    projected = mp.multiply_matrix(proj_mat, [vector])
+
+    if return_error == False:
+        return projected[0]
+    else:
+        return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
+
+a = [[1,1,1], [0,1,2]]
+psuba = find_projection_mat(a)
+
+print(project_vector([6,0,0], psuba, return_error = True))
 
     
 

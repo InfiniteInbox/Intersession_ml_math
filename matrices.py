@@ -475,38 +475,40 @@ def multip_1row(row1, row2):
 
 def multiply_matrix(matrix1, matrix2):
 
+    # the first one goes second
+
     '''this function multiplies two matrices together
     it takes each row and multiplies it by the column in the next row'''
 
     # matrix1 row and column number. len() is O(1), constant time
-    matrix1_rows = len(matrix1) 
-    matrix1_cols = len(matrix1[0]) # just taking the first. I assume that each argument is a completely filled list
+    matrix2_rows = len(matrix2) 
+    matrix2_cols = len(matrix2[0]) # just taking the first. I assume that each argument is a completely filled list
 
     # matrix2 row and column number. still constant time
-    matrix2_rows = len(matrix2)
-    matrix2_cols = len(matrix2[0])
+    matrix1_rows = len(matrix1)
+    matrix1_cols = len(matrix1[0])
 
     # makes sure that we can indeed mutliply these two matrices - that is, their dimensions must be compatible
-    if (matrix1_rows == matrix2_cols) or (matrix1_cols == matrix2_rows): 
+    if (matrix2_rows == matrix1_cols) or (matrix2_cols == matrix1_rows): 
 
         # if mat1 rows and mat2 cols are equal we switch them so the following code works
-        if (matrix1_rows == matrix2_cols):
-            matrix1, matrix2 = matrix2, matrix1
+        if (matrix2_rows == matrix1_cols):
+            matrix2, matrix1 = matrix1, matrix2
 
         new_matrix = [] # making a new matrix to hold values
 
         # iterates through each row of the first matrix
-        for m1_row in matrix1: # this line alone is O(n)
+        for m2_row in matrix2: # this line alone is O(n)
             new_matrix_row = [] # O(1) creating a new list for just the row we are doing
-            for _index in range(len(matrix2[0])): # this line is O(n)
+            for _index in range(len(matrix1[0])): # this line is O(n)
 
                 '''teh following, as a whole, is O(n) we will mutliply the the two rows,
                 except that one of these these "rows" should be a column
                 so we will use get_col() to grab it and pass it as an argument. 
                 this si '''
                 new_matrix_row.append(multip_1row( # O(n)
-                    m1_row,
-                    get_col(matrix2, _index) # O(n)
+                    m2_row,
+                    get_col(matrix1, _index) # O(n)
                 ))
             
             new_matrix.append(new_matrix_row) # addif the new row to a the full matrix
@@ -528,3 +530,4 @@ def mround(matrix, places=2):
     return matrix
 
    # O(n**2)
+
