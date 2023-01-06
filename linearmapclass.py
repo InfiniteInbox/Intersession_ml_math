@@ -7,8 +7,13 @@ class LinearMapping:
     self.domain = [row[:] for row in A]
     self.codomain = [row[:] for row in B]
     self.mapping = mapping # needs to be a matrix or None
-    print(self.domain)
-    print(self.codomain)
+    self.injective = True if mp.rank(self.mapping) == len(self.mapping[0]) else False
+    self.surjective = True if mp.rank(self.mapping) == len(self.mapping) else False
+    self.bijective = True if (self.injective == True and self.surjective == True) else False
+    self.homomorphism = True # (by definition, duh)
+    self.isomorphism = True if (self.bijective == True) else False # homomorphism already satisfied
+    self.is_endomorphism  = None # True if dim(A) == dim(B) and len(A[0]) == len(B[0]) else False
+    self.is_  
 
   def map(self, vector):
         return self.apply(vector)

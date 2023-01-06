@@ -32,10 +32,6 @@ class genset:
         print(holder)
 
         return [self.gset[i] for i in holder]
-
-    def get_rank(self):
-        temp = self.gset
-        return mp.rank(temp)
     
 def dot(v1, v2):
 
@@ -107,7 +103,7 @@ a = [
 b = [
     [1],
     [2]]
-    
+
 print(mp.multiply_matrix(a, b))
     
 

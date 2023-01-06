@@ -7,6 +7,9 @@
 
 l = [0,1,2,3,4]
 
-for i in range(len(l)):
-    for j in l[i+1:]:
-        print(f"{i}, {j}")
+# for i in range(len(l)):
+#     for j in l[i+1:]:
+#         print(f"{i}, {j}")
+
+h = True if (1+1==4) else False
+print(h)
