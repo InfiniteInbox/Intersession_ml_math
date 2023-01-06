@@ -538,6 +538,9 @@ def solve_homogeneous(coef_matrix):
     for i in range(len(coef_matrix[0])):
         if i not in pivotcols:
             notpiv_cols.append(i)
+    
+    if notpiv_cols == []:
+        return [0 for i in range(len(coef_matrix[0]))]
 
     for idx in notpiv_cols:
         coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) 
@@ -547,7 +550,7 @@ def solve_homogeneous(coef_matrix):
 
     
 
-a = [[1,3,0,0,3], [0,0,1,0,9], [0,0,0,1,-4]]
+a = [[1,0,0],[0,1,0],[0,0,1]]
 print(solve_homogeneous(a))
 
 # a = [[1,2,-1,-1,-1], [2,-1,1,2,-2], [3,-4,3,5,-3], [-1,8,-5,-6,1]]

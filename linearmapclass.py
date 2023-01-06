@@ -23,7 +23,7 @@ print(t1.create_basis())
 
 class LinearMapping:
 
-  def __init__(self, A, B=None, mapping=None):
+  def __init__(self, A, B, mapping=None):
     self.domain_basis = [A[i] for i in mp.identify_pivots(mp.transpose(A))]
     self.domain_dim = len(self.domain_basis)
     self.codomain_basis = [B[i] for i in mp.identify_pivots(mp.transpose(B))]
