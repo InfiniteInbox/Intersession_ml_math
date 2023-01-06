@@ -63,8 +63,8 @@ class LinearMapping:
 
 # Test the LinearMapping class
 A = [[1, 2], [3, 4]]
-B = [[5, 6], [7, 8]]
+B = [[5, 6, 7], [8, 9, 10],[11, 12, 13]]
 lm = LinearMapping(A, B)
-subspac1e = [1,2],[3,4]
-result = lm.is_homomorphism()
+subspac1e = [1,2]
+result = lm.apply(subspac1e)
 print(result)  
