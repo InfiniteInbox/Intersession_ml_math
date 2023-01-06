@@ -1,9 +1,31 @@
 import matrices as mp
 
+class genset:
+
+    def __init__(self, gset, columned = False):
+        self.gset = gset
+        self.columned = columned
+
+    def create_basis(self):
+
+        tempgset = self.gset
+
+        if self.columned == False:
+            tempgset = mp.transpose(tempgset)
+        
+        holder = mp.identify_pivots(tempgset)
+        print(holder)
+
+        return [self.gset[i] for i in holder]
+
+t1 = genset([[1,2,-1,-1,-1], [2,-1,1,2,-2], [3,-4,3,5,-3], [-1,8,-5,-6,1]])
+print(t1.create_basis())
+
 class LinearMapping:
-  def __init__(self, A, B, mapping=None):
-    self.matrix = A
-    self.matrix1 = B
+
+  def __init__(self, A, B=None, mapping=None):
+    self.domain_basis = [A[i] for i in mp.identify_pivots(mp.transpose(A))]
+    self.codomain_basis = [B[i] for i in mp.identify_pivots(mp.transpose(B))]
     self.domain = [row[:] for row in A]
     self.codomain = [row[:] for row in B]
     self.mapping = mapping # needs to be a matrix or None
@@ -85,13 +107,14 @@ class LinearMapping:
       # check if the mapping is from a vector space to itself and preserve vector addition
       return self.matrix == self.matrix1 and self.is_homomorphism()
 '''
+
 # Test the LinearMapping class
-A = [[1, 2], [3, 4]]
-B = [[5, 6, 7], [8, 9, 10],[11, 12, 13]]
-C = [[1,3],[2,3],[2,4]]
-lm = LinearMapping(A, B, mapping=C)
-xd = lm.typeofmapping()
-print(xd)
+# A = [[1, 2], [3, 4]]
+# B = [[5, 6, 7], [8, 9, 10],[11, 12, 13]]
+# C = [[1,3],[2,3],[2,4]]
+# lm = LinearMapping(A, B, mapping=C)
+# xd = lm.typeofmapping()
+# print(xd)
 # subspac1e = [1,2]
 # result = lm.apply_mapping(subspac1e)
 # print(result)  
