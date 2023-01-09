@@ -107,6 +107,39 @@ def make_onb(basisvectors, columned=False):
         newonb.append(mp.subtract_row(basis,new_basis)) # we do subtract row because these are not matrik, they are individual list
     
     return newonb
+def rotate_nb(vector, angles):
+    rotation_matrices = []
+    n = len(vector)
+    dim = list(range(n))
+    for i, angle in zip(dim, angles):
+    # Make a copy of the dimensions list
+        dimensions_copy = dim.copy()
+
+    # Remove the current dimension
+        dimensions_copy.remove(i)
+
+    # Make a list of the remaining dimensions
+        remaining_dimensions = dimensions_copy
+
+    # Make a rotation matrix for the current dimension
+        rotation_matrix = [[0] * n for _ in range(n)]
+        for j in range(n):
+            rotation_matrix[j][j] = 1
+        rotation_matrix[i][i] = cos(angle)
+        rotation_matrix[i][remaining_dimensions] = -math.sin(angle)
+        rotation_matrix[remaining_dimensions][i] = math.sin(angle)
+
+    # Add the rotation matrix to the list
+        rotation_matrices.append(rotation_matrix)
+
+  # Compute the product of the rotation matrices
+    rotation_matrix = rotation_matrices[0]
+    for i in range(1, len(rotation_matrices)):
+        rotation_matrix = mp.multiply_matrix(rotation_matrix, rotation_matrices[i])
+
+  
+
+  return vector_rot
 
 print(make_onb([[2,0], [1,1]]))
 
