@@ -3,7 +3,7 @@
 # sets of vectors in tuples? probably. so set b = [1, b2,..,bn] where b = [e1,.., en]
 
 # we will need to go from a list of row vectors to column vectors
-
+import trig as tr
 import matrices as mp
 
 # a = [[1,0,0],[0,1,0],[0,0,0]]
@@ -125,9 +125,9 @@ def rotate_nb(vector, angles):
         rotation_matrix = [[0] * n for _ in range(n)]
         for j in range(n):
             rotation_matrix[j][j] = 1
-        rotation_matrix[i][i] = cos(angle)
-        rotation_matrix[i][remaining_dimensions] = -math.sin(angle)
-        rotation_matrix[remaining_dimensions][i] = math.sin(angle)
+        rotation_matrix[i][i] = tr.cos(angle)
+        rotation_matrix[i][remaining_dimensions] = -tr.sin(angle)
+        rotation_matrix[remaining_dimensions][i] = tr.sin(angle)
 
     # Add the rotation matrix to the list
         rotation_matrices.append(rotation_matrix)
@@ -137,9 +137,9 @@ def rotate_nb(vector, angles):
     for i in range(1, len(rotation_matrices)):
         rotation_matrix = mp.multiply_matrix(rotation_matrix, rotation_matrices[i])
 
-  
+    vector_rot = mp.multiply_matrix(rotation_matrix, [vector])
 
-  return vector_rot
+    return vector_rot
 
 def proj_to_affine(basis_vectors, vec_to_proj, offset):
 
@@ -148,6 +148,7 @@ def proj_to_affine(basis_vectors, vec_to_proj, offset):
 
     return mp.subtract_rows(newvec_wo_offset, mp.row_by_scalar(offset, -1))
 
+print(rotate_nb([2,1], [30,74]))
 print(make_onb([[2,0], [1,1]]))
 
 # a = [[1,1,1], [0,1,2]]
