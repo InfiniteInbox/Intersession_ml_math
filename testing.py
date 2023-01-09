@@ -29,7 +29,6 @@ class genset:
             tempgset = mp.transpose(tempgset)
         
         holder = mp.identify_pivots(tempgset)
-        print(holder)
 
         return [self.gset[i] for i in holder]
     
@@ -58,12 +57,15 @@ def isorthonormal(basis, columned=False):
 
     # takes a matrix of matrices, where each inner matrix is a basis vector. assumed not columned, which ultimately is what we want for this
 
-    for idx, vec1 in enumerate(basis):
-        for vec2 in basis[idx+1:]:
-            if (dot(vec1, vec2) != 0) or (dot(vec1, vec1) != 1):
-                return False
+    if len(basis) >= 2:
+        for idx, vec1 in enumerate(basis):
+            for vec2 in basis[idx+1:]:
+                if (dot(vec1, vec2) != 0) or (dot(vec1, vec1) != 1):
+                    return False
             
-    return True
+        return True
+    
+    else: return False
 
 def find_projection_mat(basis, columned=False):
 
@@ -90,21 +92,46 @@ def project_vector(vector, proj_mat, return_error=False):
     else:
         return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
 
+def make_onb(basisvectors, columned=False):
+    # we will iteratively implement the Graham Schmidt orthogonalization Al Gore ithm 
+
+    newonb = list()
+
+    for idx, basis in enumerate(basisvectors):
+        if idx == 0:
+            newonb.append(basis)
+            continue
+
+        pmat = find_projection_mat([newonb[-1]])
+        new_basis = project_vector(basis, pmat)
+        newonb.append(mp.subtract_row(basis,new_basis)) # we do subtract row because these are not matrik, they are individual list
+    
+    return newonb
+
+print(make_onb([[2,0], [1,1]]))
+
 # a = [[1,1,1], [0,1,2]]
 # psuba = find_projection_mat(a)
 
 # print(project_vector([6,0,0], psuba, return_error = True))
 
-a = [
-    [3,2],
-    [1,4],
-    [2,4]    ]
+# # a = [[0,-1,2,0,2], [1,-3,1,-1,2], [-3,4,1,2,1]]
+# a = [[2,0]]
 
-b = [
-    [1],
-    [2]]
+# b = find_projection_mat(a)
+# print(b)
+# c = project_vector([1,1],b)
+# print(c)
+# a = [
+#     [3,2],
+#     [1,4],
+#     [2,4]    ]
 
-print(mp.multiply_matrix(a, b))
+# b = [
+#     [1],
+#     [2]]
+
+# print(mp.multiply_matrix(a, b))
     
 
 # g = genset([[1,2,-1,-1,-1], [2,-1,1,2,-2], [3,-4,3,5,-3], [-1,8,-5,-6,1]])
