@@ -551,7 +551,56 @@ def solve_homogeneous(coef_matrix):
     final = [coef_matrix[idx] for idx in notpiv_cols]
     return final
 
+def eigvals(matrix, columned=False):
+
+    # input is a matrix of standard forms, ie row vectors
+    # we want column vectors, so we will transpose if columned == False
+
+    if columned == False:
+        matrix = transpose(matrix)
     
+    print(matrix)
+
+    eigs = list()
+    for idx, column in enumerate(matrix):
+
+        removed = column[idx]
+
+        solvemat = list()
+        removed_others = list()
+        for i in range(len(matrix)):
+            if i != idx:
+                poppedwans = (matrix[i][:idx] + matrix[i][idx+1:])
+                poppedwans.append(column[i])
+                solvemat.append(poppedwans)
+                removed_others.append(matrix[i][idx])
+        
+        print(removed_others)
+
+        solveDmat = rref(solvemat)
+
+        slns = list()        
+        for i in range(len(solveDmat)):
+            slns.append(solveDmat[i][-1])
+
+        number = multiply_matrix([removed_others], transpose([slns]))[0][0]
+        eigs.append(removed-number)
+
+            
+
+        #         
+                # solvemat = append_mat_right(solvemat, [column.pop(idx)])
+        # solvemat = append_mat_right(solvemat, (column[:idx]+column[idx+1:]))
+
+    return eigs
+a = [
+    [1,4,3,2],
+    [13,4,7,1],
+    [6,12,1,1],
+    [12,3,4,0],
+    ]
+
+print(eigvals(a))
 
 # a = [[1,0,0],[0,1,0],[0,0,1]]
 # print(solve_homogeneous(a))
