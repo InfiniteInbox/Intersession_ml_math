@@ -117,6 +117,8 @@ def proj_to_affine(basis_vectors, vec_to_proj, offset):
 
 print(make_onb([[2,0], [1,1]]))
 
+print(mp.inverse([[1,1,4,],[1,1,23],[1,1,42]]))
+
 # a = [[1,1,1], [0,1,2]]
 # psuba = find_projection_mat(a)
 

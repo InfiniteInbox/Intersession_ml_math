@@ -364,6 +364,9 @@ def inverse(matrix):
     
     '''
 
+    if len(identify_pivots(matrix)) != len(matrix):
+        return False
+
     identity = make_identity(len(matrix)) # O(n**2) creates an identity matrix
 
     for i in range(2): # O(1), we run through this twice, because we upper triangle and reflect twice
