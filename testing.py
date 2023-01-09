@@ -141,6 +141,13 @@ def rotate_nb(vector, angles):
 
   return vector_rot
 
+def proj_to_affine(basis_vectors, vec_to_proj, offset):
+
+    pmat = find_projection_mat(basis_vectors)
+    newvec_wo_offset = project_vector(vec_to_proj, pmat)
+
+    return mp.subtract_rows(newvec_wo_offset, mp.row_by_scalar(offset, -1))
+
 print(make_onb([[2,0], [1,1]]))
 
 # a = [[1,1,1], [0,1,2]]
