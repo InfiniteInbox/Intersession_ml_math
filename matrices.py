@@ -219,68 +219,113 @@ def echelon(matrix):
                 matrix[row_index] = subbed_row # O(1)
     
     return matrix
+    
     # Full time: O(n**3)
 
 def ref(matrix):
+
+    # takes matrix of form outlined in flowerbox
+    # returns matrix of form outlined in flowerbox, but in ref form
+
+    # builds off of the echelon function, which merely produces an upper triangle
+    # ref turns that into an upper triangle such that the leading nonzero element of each row is 1
     
-    matrix = echelon(matrix)
+    matrix = echelon(matrix) # we make sure that the input is in upper triangle by applying echelon O(n**3)
+    # (this could be put in an if statement to potentially improve time)
 
-    mindim = min(len(matrix), len(matrix[0])) - 1
+    mindim = min(len(matrix), len(matrix[0])) - 1 # here we find the minimum dimension of the matrix
 
-    for idx, row in enumerate(matrix):
-        if idx > mindim:
-            return matrix
-        if matrix[idx][idx] !=0:
-            matrix[idx] = row_by_scalar(row, (1/row[idx]))
+    for idx, row in enumerate(matrix): # we iterate through each row of the matrix and get its index as well O(n)
+        # enumerate is O(n) 
+        # for loop itself in O(n), so 2O(n) total or just O(n)
 
-    return matrix
+        if idx > mindim: # if matrix is longer than wider, we want to finish without iterating through the lower levels
+            return matrix # we just return if that is the case, becuase this will be in ref form
+        if matrix[idx][idx] !=0: # if the leading element of each row is not 0
+            matrix[idx] = row_by_scalar(row, (1/row[idx])) # we will multiply the entire row by the inverse of the leading element O(n)
 
-    # O(n**2)
+    return matrix # returns the matrix
+
+    # Full time: O(n**3) with echelon at start, O(n**2 otherwise)
+
 def rref(matrix):
 
-    matrix = ref(matrix)
-    mindim = min(len(matrix), len(matrix[0]))
+    # takes matrix of form outlined in flowerbox
+    # returns matrix of form outlined in flowerbox, but in rref form
 
-    for idx in reversed(range(mindim)):
-        # print(idx)
-        if matrix[idx][idx] == 1.0:
-            for idx2 in reversed(range(idx)):
-                # print("\t" + str(idx2))
-                scalar = matrix[idx2][idx]            
-                subtractant = row_by_scalar(matrix[idx], scalar)
-                row_to_sub_from = matrix[idx2]
-                subbed_row = subtract_row(row_to_sub_from, subtractant)
+    # builds off of the ref function, which produces an upper triangle such that the leading elements of each row is 1
+    # rref returns a matrix such that all diagonals are 1 (which is true in ref) but also as many other elements as possible are 0
+
+    matrix = ref(matrix) # we apply ref to the matrix to make sure it is in the appropriate form
+    mindim = min(len(matrix), len(matrix[0])) # the minimum dimension of the matrix
+
+    for idx in reversed(range(mindim)): 
+        # for above: we wantt to work up from the bottom of the matrix, and will only use values that could have a pivot
+        '''in other words, if 
+        a = [
+        [1,3,8],
+        [12,3,4],
+        [16,7,1],
+        [2,1,6],
+        [12,4,5],
+        [7,2,5]
+        ]
+        then only the top 3 rows will have good pivots
+
+        O(n)
+        '''
+
+        if matrix[idx][idx] == 1.0: # we know that where pivots should be will only be 0s or 1s becuase of calling ref
+                                    # if it is not a one and is a 0, then we will not evaluate and will just skip in
+            for idx2 in reversed(range(idx)): # we then iterate through all above rows O(n)
+                
+                # here we find what we shoudl multiply matrix[idx] by to subtract it from matrix[idx2]
+                # and then we simply run through that subtraction
+                scalar = matrix[idx2][idx]  # O(1)
+                subtractant = row_by_scalar(matrix[idx], scalar) #O(n)
+                row_to_sub_from = matrix[idx2] #(1)
+                subbed_row = subtract_row(row_to_sub_from, subtractant) # O(n)
     
-                matrix[idx2] = subbed_row
+                matrix[idx2] = subbed_row # O(1)
     
     return matrix
 
+    # Full time O(n**3)
+
 def rank(matrix):
-    return len(identify_pivots(matrix))
+
+    # takes a matrix
+    # returns integer denoting the rank of the matric
+
+    return len(identify_pivots(matrix)) # we find all pivot columns and count how many their are; this is rank by definition
 
 def identify_pivots(matrix):
 
-    # identifies the pivot columns of the matrix
+    # takes matrix of form outlined in flowerbox
+    # returns a list of all indexes in which there is a pivot column upon row reducing the input matrix
 
-    matrix = ref(matrix)
+    # identifies the pivot columns of the matrix by row reducing
 
-    pivot_col_idx_list = []
-    for row in matrix:
-        try:
-            first_one = row.index(1)
-            for idx2 in range(first_one):
-                if row[idx2] != 0:
+    matrix = ref(matrix) # we run ref to row reduce it. we do not care about full row reduction because that it is trivial in this case
+
+    pivot_col_idx_list = [] # we initialize a blank list will contain indexes of pivot cols
+
+    for row in matrix: # we iterate through each row
+        try: # we add a try in case there are no ones in the row
+            first_one = row.index(1) # we find the first appearance of a 1 within the list
+            for idx2 in range(first_one): # we then check if all prior elelements are 0
+                if row[idx2] != 0: # if one is not a 0, we contiknue the loops
                     continue
 
+            # however, if all elements prior to the first 1 are 0, we will append the index of that 1 to the pivcollist
             pivot_col_idx_list.append(first_one)
 
-        except:
+        except: # if there are no ones, it can be infered that there is no pivot column in that row, so we continue
             continue 
 
     return pivot_col_idx_list    
 
     # O(n**2) time
-
 
 def matrix_det(matrix, _istriangle = False):
 
@@ -347,6 +392,9 @@ def make_identity(dim):
     # full time: O(n**2)
 
 def inverse(matrix): 
+
+    # takes a matrix of form outlined in flowerbox
+    # returns a matrix of form outlined in flowerbox, that is the inverse of the original martix
 
     '''
     finds the inverse of a matrix, uses very similar code to echelon
@@ -432,13 +480,22 @@ def inverse(matrix):
 
 def append_mat_right(mat1, mat2):
 
-    if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]):
-        for idx, row in enumerate(mat2):
-            mat1[idx].extend(row)
+    # takes two matrices of form outlined in flowerbox, must be same size
+    # returns one auigmented matrix of mat1 on left and mat2 on right
 
-    return mat1
+    # appends a matrix (mat2) to the right of another matrix (mat1) such that we have essentially created an augmented matrix
+
+    if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]): # if the dimensions are compatinle
+        for idx, row in enumerate(mat2): # we iterate throgh thhe second matrix O(n)
+            mat1[idx].extend(row) # and add it to the first via the extend fucntion, O(n)
+
+    return mat1 # we return the augmented mat 1
+
+    # full time O(n**2)
 
 def find_transition(og_base, new_base):
+
+    # we find a transition matrix that changes the coordinates expressed from one base to another base
 
     # going from base 1 to base 2
     if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
@@ -594,14 +651,14 @@ def eigvals(matrix, columned=False):
 
     return eigs
 
-a = [
-    [1,4,3,2],
-    [13,4,7,1],
-    [6,12,1,1],
-    [12,3,4,0],
-    ]
+# a = [
+#     [1,4,3,2],
+#     [13,4,7,1],
+#     [6,12,1,1],
+#     [12,3,4,0],
+#     ]
 
-print(eigvals(a))
+# print(eigvals(a))
 
 # a = [[1,0,0],[0,1,0],[0,0,1]]
 # print(solve_homogeneous(a))
