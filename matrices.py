@@ -299,8 +299,6 @@ def rank(matrix):
 
     return len(identify_pivots(matrix)) # we find all pivot columns and count how many their are; this is rank by definition
 
-    # Full time O(n**2)
-
 def identify_pivots(matrix):
 
     # takes matrix of form outlined in flowerbox
@@ -495,41 +493,25 @@ def append_mat_right(mat1, mat2):
 
     # full time O(n**2)
 
-def find_transition(og_base, new_base, columned=False):
-
-    # takes two matrices of matrices, where the inner matrices somehow represent basis vecors
-    ''''it is important to note that we assume the input is in the proper form
-
-    eg if we have basis vectors [1,2,4] and [2,3,2] and input them as such, it will be computed such that
-    we operate with basis vectors [1,2], [2,3], [4,2], which we do not want
-    setting columned to False allows you to input a list of column vectors.
-    just a note to be careful with ur inputs on this one'''
-    # returns one transition matric thet maps from og_base to new_base
+def find_transition(og_base, new_base):
 
     # we find a transition matrix that changes the coordinates expressed from one base to another base
 
-    if columned==False:
-        og_base, new_base = transpose(og_base), transpose(new_base)
-
     # going from base 1 to base 2
-    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]): # we make sure that the dimensions of the two bases are compatible
+    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
 
-        dim_to_take = len(og_base[0]) # we how big the transition matrix will be, O(1)
-        total = append_mat_right(new_base, og_base) # we create an aug mat with og base on the right and new_base on the left. # O(n**2)
-        reduced = rref(total) # we will row reduce the entire aug mat # O(n**3)
+        dim_to_take = len(og_base[0])
+        total = append_mat_right(new_base, og_base)
+        reduced = rref(total)
 
         transition_matrix = list()
 
-        for row in reduced: # we go rhough the augmat to get our slns, #O(n)
+        for row in reduced:
             transition_matrix.append(row[-dim_to_take:])
 
         return transition_matrix
-    
-    # Full time O(n**3)
-    
-def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
 
-    # takes
+def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
 
     transition1 = find_transition(tildab1, ogb1)
     transition2 = inverse(find_transition(tildab2, ogb2))
@@ -609,24 +591,25 @@ def mround(matrix, places=2):
    # O(n**2)
 
 def solve_homogeneous(coef_matrix):
+    # takes matrix of form outlined in flowerbox
+    # returns a matrix using the minus 1 trick to solve homogeneous linear systems
 
-    coef_matrix = rref(coef_matrix)
-    pivotcols = identify_pivots(coef_matrix)
-    notpiv_cols = list()
-    for i in range(len(coef_matrix[0])):
-        if i not in pivotcols:
-            notpiv_cols.append(i)
+    coef_matrix = rref(coef_matrix) # takes the rref of the coefficient matrix (system of linear eq)
+    pivotcols = identify_pivots(coef_matrix) # finds the pivot columns of the rref matrix
+    notpiv_cols = list() # since this function is called because of different size dimension matricies, there are going to be necessary added piv-columns
+    for i in range(len(coef_matrix[0])): # iterates through the columns O(n)
+        if i not in pivotcols: # Iterates through the list of pivot columns
+            notpiv_cols.append(i) # appends the non pivot column to the non-pivot col list
     
-    if notpiv_cols == []:
+    if notpiv_cols == []: # if the non-pivot columns are empty (in other words had total rank)
         return [0 for i in range(len(coef_matrix[0]))]
 
-    for idx in notpiv_cols:
-        coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) 
-    coef_matrix = transpose(coef_matrix    )
-    final = [coef_matrix[idx] for idx in notpiv_cols]
+    for idx in notpiv_cols: #Iterate through the non pivot columns
+        coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) # by the minus 1 trick, we insert a row with minus 1 in the nth index to preserve diagonality
+    coef_matrix = transpose(coef_matrix) # we transpose the matrix
+    final = [coef_matrix[idx] for idx in notpiv_cols] # we return the solution as a square matrix  
     return final
 
-'''
 def eigvals(matrix, columned=False):
 
     # input is a matrix of standard forms, ie row vectors
@@ -669,8 +652,6 @@ def eigvals(matrix, columned=False):
         # solvemat = append_mat_right(solvemat, (column[:idx]+column[idx+1:]))
 
     return eigs
-
-'''
 
 # a = [
 #     [1,4,3,2],
