@@ -107,6 +107,7 @@ def make_onb(basisvectors, columned=False):
         newonb.append(mp.subtract_row(basis,new_basis)) # we do subtract row because these are not matrik, they are individual list
     
     return newonb
+    
 def rotate_nb(vector, angles):
     rotation_matrices = []
     n = len(vector)

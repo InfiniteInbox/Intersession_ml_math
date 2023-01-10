@@ -12,7 +12,7 @@ known bugs:
 
 ######### Dependencies
 
-######### Vars
+######### GLOBALS
 
 pi = 3.1415926535
 
