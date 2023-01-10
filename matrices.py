@@ -520,7 +520,7 @@ def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, colum
         the original basis of codomain, ogb2
         the new basis of domain, tildab1
         the new basis of codomain, tildab2
-
+        AS WITH find_transition, the base inputs can be finicky, the columned flag should help. check that for more indepth docs
 
     '''
 
