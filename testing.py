@@ -128,6 +128,7 @@ def rotate_nb(vector, angles):
         rotation_matrix[i][i] = tr.cos(angle)
         rotation_matrix[i][remaining_dimensions] = -tr.sin(angle)
         rotation_matrix[remaining_dimensions][i] = tr.sin(angle)
+        print(rotation_matrix)
 
     # Add the rotation matrix to the list
         rotation_matrices.append(rotation_matrix)
@@ -148,7 +149,7 @@ def proj_to_affine(basis_vectors, vec_to_proj, offset):
 
     return mp.subtract_rows(newvec_wo_offset, mp.row_by_scalar(offset, -1))
 
-print(rotate_nb([2,1], [30,74]))
+
 print(make_onb([[2,0], [1,1]]))
 
 print(mp.inverse([[1,1,4,],[1,1,23],[1,1,42]]))
