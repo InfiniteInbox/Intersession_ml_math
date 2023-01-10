@@ -299,6 +299,8 @@ def rank(matrix):
 
     return len(identify_pivots(matrix)) # we find all pivot columns and count how many their are; this is rank by definition
 
+    # Full time O(n**2)
+
 def identify_pivots(matrix):
 
     # takes matrix of form outlined in flowerbox
@@ -496,35 +498,38 @@ def append_mat_right(mat1, mat2):
 def find_transition(og_base, new_base, columned=False):
 
     # takes two matrices of matrices, where the inner matrices somehow represent basis vecors
-    # it is important to note that we assume the input 
+    ''''it is important to note that we assume the input is in the proper form
+
+    eg if we have basis vectors [1,2,4] and [2,3,2] and input them as such, it will be computed such that
+    we operate with basis vectors [1,2], [2,3], [4,2], which we do not want
+    setting columned to False allows you to input a list of column vectors.
+    just a note to be careful with ur inputs on this one'''
     # returns one transition matric thet maps from og_base to new_base
 
     # we find a transition matrix that changes the coordinates expressed from one base to another base
 
-    # going from base 1 to base 2
-    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
+    if columned==False:
+        og_base, new_base = transpose(og_base), transpose(new_base)
 
-        dim_to_take = len(og_base[0])
-        total = append_mat_right(new_base, og_base)
-        reduced = rref(total)
+    # going from base 1 to base 2
+    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]): # we make sure that the dimensions of the two bases are compatible
+
+        dim_to_take = len(og_base[0]) # we how big the transition matrix will be, O(1)
+        total = append_mat_right(new_base, og_base) # we create an aug mat with og base on the right and new_base on the left. # O(n**2)
+        reduced = rref(total) # we will row reduce the entire aug mat # O(n**3)
 
         transition_matrix = list()
 
-        for row in reduced:
+        for row in reduced: # we go rhough the augmat to get our slns, #O(n)
             transition_matrix.append(row[-dim_to_take:])
 
         return transition_matrix
     
-a = [
-    [1,4],[2,1]
-    ]
-b = [
-    [4,3],[5,3]
-    ]
-
-print(find_transition(b, a))
-
+    # Full time O(n**3)
+    
 def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
+
+    # takes
 
     transition1 = find_transition(tildab1, ogb1)
     transition2 = inverse(find_transition(tildab2, ogb2))
