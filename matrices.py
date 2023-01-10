@@ -542,10 +542,12 @@ def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, colum
     if columned==False: # we make sure the basis inputs are the correct form ie they are column vectors
         ogb1, ogb2, tildab1, tildab2 = transpose(ogb1),transpose(ogb2),transpose(tildab1),transpose(tildab2) 
 
-    transition1 = find_transition(tildab1, ogb1) # we find transitino matrix from the new domain basis to the old domain basis, 
-    transition2 = inverse(find_transition(tildab2, ogb2))
+    transition1 = find_transition(tildab1, ogb1) # we find transitino matrix from the new domain basis to the old domain basis, O(n**3)
+    transition2 = inverse(find_transition(tildab2, ogb2)) # we find inverse of transition matrix from new codomain basis to old codomain basis, O(n**3)
 
-    return multiply_matrix(multiply_matrix(transition2, ogtransfmat), transition1)
+    return multiply_matrix(multiply_matrix(transition2, ogtransfmat), transition1) # we multiply the matrices according to formula, O(n**3)
+
+    # full time O(n**3)
 
 def multip_1row(row1, row2):
 
