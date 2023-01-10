@@ -608,8 +608,8 @@ def solve_homogeneous(coef_matrix):
     # takes matrix of form outlined in flowerbox
     # returns a matrix using the minus 1 trick to solve homogeneous linear systems
 
-    coef_matrix = rref(coef_matrix) # takes the rref of the coefficient matrix (system of linear eq)
-    pivotcols = identify_pivots(coef_matrix) # finds the pivot columns of the rref matrix
+    coef_matrix = rref(coef_matrix) # takes the rref of the coefficient matrix (system of linear eq) O(n**3)
+    pivotcols = identify_pivots(coef_matrix) # finds the pivot columns of the rref matrix O(n**2)
     notpiv_cols = list() # since this function is called because of different size dimension matricies, there are going to be necessary added piv-columns
     for i in range(len(coef_matrix[0])): # iterates through the columns O(n)
         if i not in pivotcols: # Iterates through the list of pivot columns
@@ -623,6 +623,8 @@ def solve_homogeneous(coef_matrix):
     coef_matrix = transpose(coef_matrix) # we transpose the matrix
     final = [coef_matrix[idx] for idx in notpiv_cols] # we return the solution as a square matrix  
     return final
+
+    # O(n**3)
 
 def eigvals(matrix, columned=False):
 
