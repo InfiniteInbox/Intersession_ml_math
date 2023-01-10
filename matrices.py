@@ -493,7 +493,11 @@ def append_mat_right(mat1, mat2):
 
     # full time O(n**2)
 
-def find_transition(og_base, new_base):
+def find_transition(og_base, new_base, columned=False):
+
+    # takes two matrices of matrices, where the inner matrices somehow represent basis vecors
+    # it is important to note that we assume the input 
+    # returns one transition matric thet maps from og_base to new_base
 
     # we find a transition matrix that changes the coordinates expressed from one base to another base
 
@@ -510,6 +514,15 @@ def find_transition(og_base, new_base):
             transition_matrix.append(row[-dim_to_take:])
 
         return transition_matrix
+    
+a = [
+    [1,4],[2,1]
+    ]
+b = [
+    [4,3],[5,3]
+    ]
+
+print(find_transition(b, a))
 
 def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
 
@@ -608,6 +621,7 @@ def solve_homogeneous(coef_matrix):
     final = [coef_matrix[idx] for idx in notpiv_cols]
     return final
 
+'''
 def eigvals(matrix, columned=False):
 
     # input is a matrix of standard forms, ie row vectors
@@ -650,6 +664,8 @@ def eigvals(matrix, columned=False):
         # solvemat = append_mat_right(solvemat, (column[:idx]+column[idx+1:]))
 
     return eigs
+
+'''
 
 # a = [
 #     [1,4,3,2],
