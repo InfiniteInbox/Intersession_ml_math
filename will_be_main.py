@@ -79,38 +79,44 @@ class sub_space:
         TAKES:
             a generating set of vectors. we assume that they are NOT columned, but WILL NOT CHANGE THEM
             the columned flag, automatically set to False, that is, we assume input vectors are row vectors that should be col vecs
-                ie gset = [[1,2,3,4], [1,3,9,1]] and sa
-        '''
+                ie gset = [[1,2,3,4], [1,3,9,1]] then if using with other parts of program, they will read vectors [1,1], [2,3], etc 
+                rather than [1,2,3,4] and [1,3,9,1]. 
+            We do not change the input in self.gset, but will do so when we determine the basis in self.basis      
+            '''
 
-        self.columned = columned
-        self.gset = gset        
-        self.basis = self.create_basis()
+        self.columned = columned # columned flag, this is bool
+        self.gset = gset # raw generating set, not modified at all
+        self.basis = self.create_basis() # we run the self.basis method, which will determine a basis from the given generating set
+        self.isorthonormal = self.isorthonormal()
 
-    def create_basis(self):
 
-        tempgset = self.gset
+    def create_basis(self): 
 
-        if self.columned == False:
-            tempgset = mp.transpose(tempgset)
+        # we find the basis of generatign set
+
+        tempgset = self.gset # we create a temporary gset to not modify the original
+
+        if self.columned == False: # if the input generating vectors are row vecs
+            tempgset = mp.transpose(tempgset) # we will make then col vecs
         
-        holder = mp.identify_pivots(tempgset)
-        print(holder)
+        holder = mp.identify_pivots(tempgset) # now we identify pivots of the generating set, O(n**2)
 
-        return [self.gset[i] for i in holder]
+        return [self.gset[i] for i in holder] # then we will return all of the vectors
     
-    def isorthonormal(self, basis, columned=False): 
+    def isorthonormal(self): 
 
-    # takes a matrix of matrices, where each inner matrix is a basis vector. assumed not columned, which ultimately is what we want for this
+        if self.columned == False: # if the input basis vecs are row vecs, a
+            basis = mp.transpose(self.basis) # we will make them col vecs, but will use a new var to not modify self.basis
 
-        if len(basis) >= 2:
-            for idx, vec1 in enumerate(basis):
-                for vec2 in basis[idx+1:]:
-                    if (dot(vec1, vec2) != 0) or (dot(vec1, vec1) != 1):
-                        return False
+        if len(basis) >= 2: # orthonormal must have at least two basis vectors
+            for idx, vec1 in enumerate(basis):  # now we run through each basis vector O(n)
+                for vec2 in basis[idx+1:]: # we run through each other basis vecor
+                    if (dot(vec1, vec2) != 0) or (dot(vec1, vec1) != 1): # if any of them do not pass the test (<v1,v2> = 0 or <v1,v1> =1) (dot defined lower)
+                        return False # then we will return False because all must pass the test
                 
-            return True
+            return True # otherwise, if False not returned yet, we know it to be true
         
-        else: return False
+        else: return False # if only one basis vec, nothing to be orthonormal to
 
 class LinearMapping:
 
