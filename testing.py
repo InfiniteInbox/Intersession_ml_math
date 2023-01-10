@@ -73,6 +73,7 @@ def find_projection_mat(basis, columned=False):
 
     isortho = isorthonormal(basis)
 
+
     if columned == False:
         basis = mp.transpose(basis)
     
@@ -80,7 +81,9 @@ def find_projection_mat(basis, columned=False):
         return mp.multiply_matrix(basis, mp.transpose(basis))
 
     else:
+
         psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis))
+        print(psueod_inv)
         return mp.multiply_matrix(basis, psueod_inv)
 
 def project_vector(vector, proj_mat, return_error=False):
@@ -97,17 +100,19 @@ def make_onb(basisvectors, columned=False):
 
     newonb = list()
 
-    for idx, basis in enumerate(basisvectors):
+    for idx, basis in enumerate(basisvectors): 
         if idx == 0:
             newonb.append(basis)
-            continue
+            continue    
 
         pmat = find_projection_mat([newonb[-1]])
         new_basis = project_vector(basis, pmat)
         newonb.append(mp.subtract_row(basis,new_basis)) # we do subtract row because these are not matrik, they are individual list
     
     return newonb
-    
+
+print(make_onb([[2,0],[1,1]]))
+
 def rotate_nb(vector, angles):
     rotation_matrices = []
     n = len(vector)
@@ -151,9 +156,8 @@ def proj_to_affine(basis_vectors, vec_to_proj, offset):
     return mp.subtract_rows(newvec_wo_offset, mp.row_by_scalar(offset, -1))
 
 
-print(make_onb([[2,0], [1,1]]))
 
-print(mp.inverse([[1,1,4,],[1,1,23],[1,1,42]]))
+# print(mp.inverse([[1,1,4,],[1,1,23],[1,1,42]]))
 
 # a = [[1,1,1], [0,1,2]]
 # psuba = find_projection_mat(a)

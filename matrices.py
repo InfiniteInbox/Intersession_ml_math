@@ -473,7 +473,7 @@ def inverse(matrix):
     # we divide by 1/the diagonal in each row of the matrix 
     for i in range(len(matrix)):
         identity[i] = row_by_scalar(identity[i], (1/matrix[i][i]))
-
+        
     return identity
 
     # full time: O(n**3)
@@ -643,3 +643,12 @@ def solve_homogeneous(coef_matrix):
 
     # O(n**3)
 
+a = [
+    [5,43,1],
+    [7,4,32],
+    [21,30,89]
+]
+
+b = inverse(a)
+
+print(b)
