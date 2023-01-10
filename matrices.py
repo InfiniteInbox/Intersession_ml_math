@@ -529,7 +529,7 @@ def find_transition(og_base, new_base, columned=False):
     
 def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
 
-    # takes
+    # takes a transformation matrix/linmapping
 
     transition1 = find_transition(tildab1, ogb1)
     transition2 = inverse(find_transition(tildab2, ogb2))
