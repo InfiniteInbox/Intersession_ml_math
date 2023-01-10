@@ -511,7 +511,21 @@ def find_transition(og_base, new_base):
 
         return transition_matrix
 
-def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2):
+def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, columned=False):
+    
+    '''
+    TAKES:
+        the transformation matrix/linmapping, ogtransfmat, of standard form outlined in flowerbox
+        the original basis of domain, ogb1
+        the original basis of codomain, ogb2
+        the new basis of domain, tildab1
+        the new basis of codomain, tildab2
+
+
+    '''
+
+    if columned==False:
+        ogb1, ogb2, tildab1, tildab2 = transpose(ogb1),transpose(ogb2),transpose(tildab1),transpose(tildab2) 
 
     transition1 = find_transition(tildab1, ogb1)
     transition2 = inverse(find_transition(tildab2, ogb2))
