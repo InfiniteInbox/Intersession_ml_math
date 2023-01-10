@@ -449,12 +449,3 @@ def multiply_matrix(matrix1, matrix2):
     
     # full time O(n**3)
 
-a = [
-    [5,43,1],
-    [7,4,32],
-    [21,30,89]
-]
-
-b = inverse(a)
-
-print(b)
