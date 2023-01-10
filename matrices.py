@@ -593,6 +593,7 @@ def eigvals(matrix, columned=False):
         # solvemat = append_mat_right(solvemat, (column[:idx]+column[idx+1:]))
 
     return eigs
+
 a = [
     [1,4,3,2],
     [13,4,7,1],
