@@ -513,16 +513,18 @@ def find_transition(og_base, new_base, columned=False):
     # going from base 1 to base 2
     if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
 
-        dim_to_take = len(og_base[0])
-        total = append_mat_right(new_base, og_base)
-        reduced = rref(total)
+        dim_to_take = len(og_base[0]) # we find what the dimensions of the transmat will be
+        total = append_mat_right(new_base, og_base) # we create an augmented matrix with new basis on left and old basis on right
+        reduced = rref(total) # row reduce, O(n**3)
 
-        transition_matrix = list()
+        transition_matrix = list() # init our blank transition matrix
 
-        for row in reduced:
+        for row in reduced: # we go through the reduced augmat to find what should be added to the transition matrix
             transition_matrix.append(row[-dim_to_take:])
 
         return transition_matrix
+    
+    # FUll time O(n**3)
 
 def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, columned=False):
     
@@ -540,7 +542,7 @@ def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, colum
     if columned==False: # we make sure the basis inputs are the correct form ie they are column vectors
         ogb1, ogb2, tildab1, tildab2 = transpose(ogb1),transpose(ogb2),transpose(tildab1),transpose(tildab2) 
 
-    transition1 = find_transition(tildab1, ogb1)
+    transition1 = find_transition(tildab1, ogb1) # we find transitino matrix from the new domain basis to the old domain basis, 
     transition2 = inverse(find_transition(tildab2, ogb2))
 
     return multiply_matrix(multiply_matrix(transition2, ogtransfmat), transition1)
