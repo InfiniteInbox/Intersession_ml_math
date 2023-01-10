@@ -493,7 +493,20 @@ def append_mat_right(mat1, mat2):
 
     # full time O(n**2)
 
-def find_transition(og_base, new_base):
+def find_transition(og_base, new_base, columned=False):
+
+    '''
+    TAKES:
+        original basis of subspace, og_base
+        new basis of subspace, new_base
+
+        it is important to pay mind to the shape of these basis vectors. 
+        eg, input [[1,3,4], [1,4,7]] where each sublist is a basis vector will be treated as 3 col vectors, 
+        [1,1], [3,4], and [4,7]. we added the columned flag to help with this
+    '''
+
+    if columned==False:
+        og_base, new_base = transpose(og_base), transpose(new_base)
 
     # we find a transition matrix that changes the coordinates expressed from one base to another base
 
@@ -524,7 +537,7 @@ def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, colum
 
     '''
 
-    if columned==False:
+    if columned==False: # we make sure the basis inputs are the correct form ie they are column vectors
         ogb1, ogb2, tildab1, tildab2 = transpose(ogb1),transpose(ogb2),transpose(tildab1),transpose(tildab2) 
 
     transition1 = find_transition(tildab1, ogb1)
