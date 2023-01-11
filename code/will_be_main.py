@@ -259,6 +259,7 @@ def make_onb(basisvectors, columned=False):
 
 ####### qr decomp
 
+from tqdm import tqdm
 
 def isuppertriangle(matrix, tolerance=6):
 
@@ -300,32 +301,53 @@ def qrdecomp(matrix):
     r = mp.multiply_matrix(qinv,mp.transpose(matrix))
     return q,r 
 
-def eigvals(matrix, tolerance=6):
+def eigvals(matrix, iterations = 1000, tolerance=6):
 
     eigs = list()
     activemat = matrix.copy()
 
     istriangle = False
 
-    i = 0
-    while not istriangle:
+    for i in range(iterations):
+    # while not istriangle:
         q, r = qrdecomp(activemat)
         activemat = mp.multiply_matrix(r,q)
 
-        istriangle = isuppertriangle(activemat, tolerance)
-        i+=1
-    
-    print(i)
-    return mp.diags(activemat)
+            # istriangle = isuppertriangle(activemat, tolerance)
+        
+    if isuppertriangle(activemat, tolerance):
+        return mp.diags(activemat)
 
+    else:
+        for idx, row in enumerate(activemat):
+            if 
+
+
+# a  = [
+#     [12,-51,4,4,6,7,1,2,9,12],
+#     [6,167,-68,23,12,34,12,3,12,3],
+#     [-4,24,-41,12,3,4,3,5,12,3],
+#     [21,3,4,12,3,4,12,3,4,1],
+#     [12,3,4,1,2,3,5,-6,12,-6],
+#     [123,4,6,2,3,-6,4,2,3,1],
+#     [23,4,2,876,1,24,-8,-2,3,71],
+#     [0,23,4,-3,-8,4,6,12,5,9],
+#     [2,4,5,1,98,34,1,23,12,65],
+#     [0,1,1,2,3,5,8,13,21,34]
+# ]
 
 a  = [
-    [12,-51,4],
-    [6,167,-68],
-    [-4,24,-41]
+    [2,3,1,0.5,4],
+    [4,5,7,0.1,1],
+    [5,3,6,19.2,9],
+    [1,4,1,4,7],
+    [3,1,6,2,6]
 ]
 
-print(eigvals(a,8))
+h = eigvals(a,8)
+
+for row in h:
+    print(row)
 
 # q,r = qrdecomp(a)
 
