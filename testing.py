@@ -83,7 +83,6 @@ def find_projection_mat(basis, columned=False):
     else:
 
         psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis))
-        print(psueod_inv)
         return mp.multiply_matrix(basis, psueod_inv)
 
 def project_vector(vector, proj_mat, return_error=False):

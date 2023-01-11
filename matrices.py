@@ -651,6 +651,4 @@ a = [
     [21,30,89]
 ]
 
-b = identify_pivots(a)
-
-print(a)
+print(inverse(a))

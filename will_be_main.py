@@ -231,7 +231,7 @@ class LinearMapping:
 
 #################### FUNCTIONS ####################
 
-def dot(v1, v2):
+def g(v1, v2):
 
     if not(isinstance(v1[0], list)) and not(isinstance(v2[0], list)) and (len(v1)==len(v2)):
         total = 0
@@ -240,9 +240,6 @@ def dot(v1, v2):
         
         return total
 
-def euclidean_norm(vector):
-
-    return (dot(vector, vector))**(1/2)
 
 
 ############## STASH
