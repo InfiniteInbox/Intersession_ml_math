@@ -645,10 +645,10 @@ def solve_homogeneous(coef_matrix):
 
     # O(n**3)
 
-a = [
-    [5,43,1],
-    [7,4,32],
-    [21,30,89]
-]
+# a = [
+#     [5,43,1],
+#     [7,4,32],
+#     [21,30,89]
+# ]
 
-print(inverse(a))
+# print(inverse(a))

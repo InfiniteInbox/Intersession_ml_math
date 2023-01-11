@@ -257,6 +257,90 @@ def make_onb(basisvectors, columned=False):
     
     return newonb
 
+####### qr decomp
+
+
+def isuppertriangle(matrix, tolerance=8):
+
+    for idx, row in enumerate(matrix):
+        
+        for idx2 in range(idx):
+            if round(row[idx2], tolerance) != 0:
+                return False
+    
+    return True
+
+def qrdecomp(matrix):
+    
+    matrix = mp.transpose(matrix)
+
+    q = list()
+    r = list()
+    uactive = None
+    ulist = list()
+    for idx, column in enumerate(matrix):
+        if idx == 0:
+            uactive = column
+        else:
+            uactive = column
+            for oldu in ulist:
+
+                inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
+                projected = mp.row_by_scalar(oldu, inprodscalar)
+                uactive = mp.subtract_row(uactive, projected)
+
+        norm = 1/(euclidean_norm(uactive))
+        e = mp.row_by_scalar(uactive, norm)
+
+        ulist.append(uactive)
+        q.append(e)
+
+    q = mp.transpose(q)
+    qinv = mp.inverse(q.copy())
+    r = mp.multiply_matrix(qinv,mp.transpose(matrix))
+    return q,r 
+
+
+
+a  = [
+    [12,-51,4],
+    [6,167,-68],
+    [-4,24,-41]
+]
+
+
+
+
+# for row in c:
+#     print(row)
+
+# print("###########")
+# d = mp.multiply_matrix(c, b)
+# print("###########")
+# for row in d:
+#     print(row)
+
+
+# for row in b:
+#     print(row)
+
+# print("###########")
+
+# d = mp.transpose(b)
+
+# for row in d:
+#     print(row)
+
+# print("###########")
+
+# c = mp.inverse(b)
+
+# for row in c:
+#     print(row)
+
+# print("###########")
+
+
 
 
 
