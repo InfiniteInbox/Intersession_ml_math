@@ -260,7 +260,7 @@ def make_onb(basisvectors, columned=False):
 ####### qr decomp
 
 
-def isuppertriangle(matrix, tolerance=8):
+def isuppertriangle(matrix, tolerance=6):
 
     for idx, row in enumerate(matrix):
         
@@ -300,6 +300,23 @@ def qrdecomp(matrix):
     r = mp.multiply_matrix(qinv,mp.transpose(matrix))
     return q,r 
 
+def eigvals(matrix, tolerance=6):
+
+    eigs = list()
+    activemat = matrix.copy()
+
+    istriangle = False
+
+    i = 0
+    while not istriangle:
+        q, r = qrdecomp(activemat)
+        activemat = mp.multiply_matrix(r,q)
+
+        istriangle = isuppertriangle(activemat, tolerance)
+        i+=1
+    
+    print(i)
+    return mp.diags(activemat)
 
 
 a  = [
@@ -308,7 +325,9 @@ a  = [
     [-4,24,-41]
 ]
 
+print(eigvals(a,8))
 
+# q,r = qrdecomp(a)
 
 
 # for row in c:

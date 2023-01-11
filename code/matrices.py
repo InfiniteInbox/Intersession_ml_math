@@ -299,7 +299,7 @@ def rank(matrix):
 
     return len(identify_pivots(matrix)) # we find all pivot columns and count how many their are; this is rank by definition
 
-def identify_pivots(mat):
+def identify_pivots(mat, rounded=True):
 
     # takes matrix of form outlined in flowerbox
     # returns a list of all indexes in which there is a pivot column upon row reducing the input matrix
@@ -309,6 +309,9 @@ def identify_pivots(mat):
     matrix = mat.copy() # we make a copy because otherwise the original matrix is modified and we get fucked
 
     matrix = ref(matrix) # we run ref to row reduce it. we do not care about full row reduction because that it is trivial in this case
+    
+    if rounded: # this combats error where 0.99999999999 is not read as one, and therefore not read as a pivot
+        matrix = mround(matrix, 12)
 
     pivot_col_idx_list = [] # we initialize a blank list will contain indexes of pivot cols
 
@@ -645,10 +648,16 @@ def solve_homogeneous(coef_matrix):
 
     # O(n**3)
 
+def diags(matrix):
+
+    return [row[idx] for idx, row in enumerate(matrix)]
+
 # a = [
 #     [5,43,1],
 #     [7,4,32],
 #     [21,30,89]
 # ]
+
+# print(diags(a))
 
 # print(inverse(a))
