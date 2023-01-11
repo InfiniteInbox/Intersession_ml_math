@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.10)  11 JAN 2023 08:52
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.10)  11 JAN 2023 09:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -115,35 +115,27 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 34.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 34.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 38.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 38.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 38.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 38.
 
-Underfull \hbox (badness 10000) in paragraph at lines 38--39
-
+Overfull \hbox (7.56583pt too wide) in paragraph at lines 43--43
+[]\OT1/cmr/bx/n/17.28 Representing Lin-ear Map-pings Python-i-cally 
  []
 
 [1
 
-{c:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3] [4] (./code_doc.aux) ) 
+{c:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./code_doc.aux) ) 
 Here is how much of TeX's memory you used:
- 3195 strings out of 476093
- 46989 string characters out of 5795583
- 1937787 words of memory out of 5000000
- 23588 multiletter control sequences out of 15000+600000
- 517655 words of font info for 50 fonts, out of 8000000 for 9000
+ 2758 strings out of 476093
+ 43161 string characters out of 5795583
+ 1850787 words of memory out of 5000000
+ 23159 multiletter control sequences out of 15000+600000
+ 514710 words of font info for 40 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,8n,62p,844b,1838s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on code_doc.pdf (4 pages, 97878 bytes).
+ 55i,6n,62p,268b,262s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
+Output written on code_doc.pdf (1 page, 38604 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
- 34 compressed objects within 1 object stream
+ 23 PDF objects out of 1000 (max. 8388607)
+ 13 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
