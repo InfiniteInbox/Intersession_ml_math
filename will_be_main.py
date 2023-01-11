@@ -73,7 +73,7 @@ class sub_space:
     in the case of being given basis vectors of R^n, it is FACT than the span of those vectors will ALWAYS be a vector space    '''
 
 
-    def __init__(self, gset, columned = False):
+    def __init__(self, gset, computeoninit=True, columned = False):
 
         '''
         TAKES:
@@ -86,9 +86,20 @@ class sub_space:
 
         self.columned = columned # columned flag, this is bool
         self.gset = gset # raw generating set, not modified at all
-        self.basis = self.create_basis() # we run the self.basis method, which will determine a basis from the given generating set
-        self.isorthonormal = self.isorthonormal()
-        self.proj_mat = self.find_projection_mat()
+
+        if computeoninit == True:
+
+
+            self.basis = self.create_basis() # we run the self.basis method, which will determine a basis from the given generating set
+            self.isorthonormal = self.isorthonormal()
+            self.proj_mat = self.find_projection_mat()
+            self.onb = make_onb(self.basis, self.columned)
+        
+        else: 
+
+            self.basis = None
+            self.isorthonormal = None
+            self.proj_mat = None
 
 
     def create_basis(self): 
@@ -137,45 +148,6 @@ class sub_space:
             psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis)) # we use da formula O(n**#)
             return mp.multiply_matrix(basis, psueod_inv) # O(n**3)
     
-    def vecprojection(self, vector, return_error=False):
-
-        '''
-        TAKE:
-            self, specifically self.proj_mat
-            we also take a vector of the form [x1, ..., xn] where x1,...,xn are real number elements
-            return_error flag, automatically set to false, that determines if we should also give the projection_error that occured
-        RETURNS:
-            the projection of vector onto the subspace represented by this object
-        '''
-
-        projected = mp.multiply_matrix(self.proj_mat, [vector]) # the projected coordinates of the vector onto this subspace - note that we must embed the 1d vector into a list to make it 2d
-
-        if return_error == False: # if we dont care abt the projection error
-            return projected[0] # we will simply return the projected vector - note the [0] because at this point, projected is a 2d array and the 0th element is the projected vector
-        else: # otherwise, if return_error is not False
-            return projected[0], euclidean_norm(mp.subtract_row(vector, projected[0])) # we will give back both the projected vector and the projection error
-
-    def make_onb(self, columned=False):
-
-        # we will iteratively implement the Graham Schmidt orthogonalization Al Gore ithm 
-
-        if self.columned == False:
-
-        basisvecs = self.basis
-
-        newonb = list()
-
-        for idx, basis in enumerate(basisvectors):
-            if idx == 0:
-                newonb.append(basis)
-                continue
-
-            pmat = find_projection_mat([newonb[-1]])
-            new_basis = project_vector(basis, pmat)
-            newonb.append(mp.subtract_row(basis,new_basis)) # we do subtract row because these are not matrik, they are individual list
-        
-        return newonb
-
 class LinearMapping:
 
   def __init__(self, A, B, mapping=None):
@@ -231,7 +203,7 @@ class LinearMapping:
 
 #################### FUNCTIONS ####################
 
-def g(v1, v2):
+def dot(v1, v2):
 
     if not(isinstance(v1[0], list)) and not(isinstance(v2[0], list)) and (len(v1)==len(v2)):
         total = 0
@@ -239,6 +211,52 @@ def g(v1, v2):
             total += v1[idx]*v2[idx]
         
         return total
+    
+def euclidean_norm(vector):
+
+    return (dot(vector, vector))**(1/2)
+
+def find_projection_mat(basis, columned=False):
+
+    # takes a basis, and assumes it is not columned. it must be columnbed for us to continue.
+
+    if columned == False:
+        basis = mp.transpose(basis)
+
+    # is ortho check reserved for object
+
+    psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis))
+    return mp.multiply_matrix(basis, psueod_inv)
+
+def project_vector(vector, proj_mat, return_error=False):
+
+    '''
+    if using sub_space obj, will look like newvec = project_vector(vec, sub_space.proj_mat)
+    '''
+    
+    projected = mp.multiply_matrix(proj_mat, [vector])
+
+    if return_error == False:
+        return projected[0]
+    else:
+        return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
+
+def make_onb(basisvectors, columned=False):
+    # we will iteratively implement the Graham Schmidt orthogonalization Al Gore ithm 
+
+    newonb = list()
+
+    for idx, basis in enumerate(basisvectors): 
+        if idx == 0:
+            newonb.append(basis)
+            continue    
+
+        pmat = find_projection_mat([newonb[-1]])
+        new_basis = project_vector(basis, pmat)
+        newonb.append(mp.subtract_row(basis,new_basis)) # we do subtract row because these are not matrik, they are individual list
+    
+    return newonb
+
 
 
 
