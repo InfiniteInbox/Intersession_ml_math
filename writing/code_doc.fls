@@ -1,8 +1,8 @@
-PWD c:/Users/yjain24/Desktop/intersession_ml_math/writing
+PWD c:/Users/iiftikar25/Desktop/code/intersession_ml_math/writing
 INPUT c:/texlive/2022/texmf.cnf
 INPUT c:/texlive/2022/texmf-dist/web2c/texmf.cnf
 INPUT c:/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt
-INPUT c:/Users/yjain24/Desktop/intersession_ml_math/writing/code_doc.tex
+INPUT c:/Users/iiftikar25/Desktop/code/intersession_ml_math/writing/code_doc.tex
 OUTPUT code_doc.log
 INPUT c:/texlive/2022/texmf-dist/tex/latex/base/article.cls
 INPUT c:/texlive/2022/texmf-dist/tex/latex/base/article.cls
