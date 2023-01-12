@@ -34,9 +34,33 @@
 \maketitle
 
 
+
 \section{Basic Matrix Code}
 
+To begin, we have will create code that represents matrices and
+performs elementary matrix operations, such as computing the inverse, 
+multiplying, and adding. 
+
+We will utilise python to do so. Python has a data structure known as a "list" or an "array."
+These are essentially a collection of indexed data than can be manipulated. Lists may contain sublists; it is in this way
+that we can represent a "matrix" in python, for indeed, a matrix containes
+
 \subsection{Matrix Multiplication}
+
+\begin{lstlisting}
+    def project_vector(vector, proj_mat, return_error=False):
+
+    '''
+    if using sub_space obj, will look like newvec = project_vector(vec, sub_space.proj_mat)
+    '''
+    
+    projected = mp.multiply_matrix(proj_mat, [vector])
+
+    if return_error == False:
+        return projected[0]
+    else:
+        return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
+\end{lstlisting}
 
 \section{Representing Subspaces Pythonically}
 

@@ -373,7 +373,7 @@ a  = [
 #     [3,1,6,2,6]
 # ]
 
-h = eigvals(a,400)
+h = eigvals(a,500)
 
 for row in h:
     print(row)

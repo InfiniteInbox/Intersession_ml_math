@@ -1,15 +1,18 @@
 # Fdb version 4
-["pdflatex"] 1673456458 "c:/Users/iiftikar25/Desktop/code/intersession_ml_math/writing/code_doc.tex" "code_doc.pdf" "code_doc" 1673456459 0
-  "c:/Users/iiftikar25/Desktop/code/intersession_ml_math/writing/code_doc.tex" 1673456456 1202 967b1b2b7c197dc366e91ae1913c8fed ""
+["pdflatex"] 1673534831 "c:/Users/iiftikar25/Desktop/code/intersession_ml_math/writing/code_doc.tex" "code_doc.pdf" "code_doc" 1673534831 0
+  "c:/Users/iiftikar25/Desktop/code/intersession_ml_math/writing/code_doc.tex" 1673534829 2112 24806620057d91586690cfa3195a2e59 ""
   "c:/texlive/2022/texmf-dist/fonts/map/fontname/texfonts.map" 1673358749 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm" 1673357382 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1673357382 1524 4414a8315f39513458b80dfc63bff03a ""
+  "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmr10.tfm" 1673357382 1296 45809c5a464d5f32c8f98ba97c1bb47f ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1673357382 1288 655e228510b4c2a1abe905c368440826 ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmr17.tfm" 1673357382 1292 296a67155bdbfc32aa9c636f21e91433 ""
   "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1673357382 1124 6c73e740cf17375f03eec0ee63599741 ""
+  "c:/texlive/2022/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm" 1673357382 768 1321e9409b4137d6fb428ac9dc956269 ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1673356309 32080 340ef9bf63678554ee606688e7b5339d ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1673356309 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1673356309 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
+  "c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb" 1673356309 31099 342ef5a582aacbd3346f3cf4579679fa ""
   "c:/texlive/2022/texmf-dist/tex/context/base/mkii/supp-pdf.mkii" 1673360685 71627 94eb9990bed73c364d7f53f960cc8c5b ""
   "c:/texlive/2022/texmf-dist/tex/latex/base/article.cls" 1673359800 20144 d5ecf0a5140c8d8d8b72cbe86e320eff ""
   "c:/texlive/2022/texmf-dist/tex/latex/base/size12.clo" 1673359800 8449 c314623021fbddd0180c05345324933c ""
@@ -33,8 +36,8 @@
   "c:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1673363750 4662777 47d999f891270c1ec2e3f69191e4532c ""
   "c:/texlive/2022/texmf-var/web2c/pdftex/pdflatex.fmt" 1673363874 7874754 3dc2b34eb72da2c233132be85c51e740 ""
   "c:/texlive/2022/texmf.cnf" 1673363734 713 e69b156964470283e0530f5060668171 ""
-  "code_doc.aux" 1673456458 1142 07a532fa3b8717ed957a495fb490d760 "pdflatex"
-  "code_doc.tex" 1673456456 1202 967b1b2b7c197dc366e91ae1913c8fed ""
+  "code_doc.aux" 1673534831 1142 8bf5b24bcfac521ae5bcf90058d4073b "pdflatex"
+  "code_doc.tex" 1673534829 2112 24806620057d91586690cfa3195a2e59 ""
   (generated)
   "code_doc.aux"
   "code_doc.log"
