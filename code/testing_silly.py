@@ -31,4 +31,16 @@
 # for row in a:
 #     print(row)
 
+a = [2,3,54,4,3,2]
 
+del a[2:2+2]
+
+g = "bruh"
+h = "abcs"
+
+a.insert(2, g)
+
+print(a)
+a.insert(2, h)
+
+print(a)

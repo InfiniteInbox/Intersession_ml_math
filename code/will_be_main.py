@@ -259,8 +259,6 @@ def make_onb(basisvectors, columned=False):
 
 ####### qr decomp
 
-from tqdm import tqdm
-
 def isuppertriangle(matrix, tolerance=6):
 
     for idx, row in enumerate(matrix):
@@ -319,67 +317,68 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
         return mp.diags(activemat)
 
     else:
-        for idx, row in enumerate(activemat):
-            if 
+
+        eigvals = mp.diags(activemat)
+        print(eigvals)
+
+        for idx in range(len(activemat)-1):
+
+            if round(activemat[idx+1][idx], 8) != 0:
+
+                a = activemat[idx][idx]
+                b = activemat[idx][idx+1]
+                c = activemat[idx+1][idx]
+                d = activemat[idx+1][idx+1]
+
+                term1 = -(-a-d)
+                term2 = ((term1**2) - 4*(a*d - b*c))
+                positiveroot = (term1 + term2**(1/2))/2
+                negativeroot = (term1 - term2**(1/2))/2
 
 
-# a  = [
-#     [12,-51,4,4,6,7,1,2,9,12],
-#     [6,167,-68,23,12,34,12,3,12,3],
-#     [-4,24,-41,12,3,4,3,5,12,3],
-#     [21,3,4,12,3,4,12,3,4,1],
-#     [12,3,4,1,2,3,5,-6,12,-6],
-#     [123,4,6,2,3,-6,4,2,3,1],
-#     [23,4,2,876,1,24,-8,-2,3,71],
-#     [0,23,4,-3,-8,4,6,12,5,9],
-#     [2,4,5,1,98,34,1,23,12,65],
-#     [0,1,1,2,3,5,8,13,21,34]
-# ]
+                del eigvals[idx:idx+2]
+                eigvals.insert(idx,positiveroot)
+                eigvals.insert(idx+1,negativeroot)
+
+                idx+=1
+
+        return eigvals
 
 a  = [
-    [2,3,1,0.5,4],
-    [4,5,7,0.1,1],
-    [5,3,6,19.2,9],
-    [1,4,1,4,7],
-    [3,1,6,2,6]
+    [12,-51,4,4,6,7,1,2,9,12],
+    [6,167,-68,23,12,34,12,3,12,3],
+    [-4,24,-41,12,3,4,3,5,12,3],
+    [21,3,4,12,3,4,12,3,4,1],
+    [12,3,4,1,2,3,5,-6,12,-6],
+    [123,4,6,2,3,-6,4,2,3,1],
+    [23,4,2,876,1,24,-8,-2,3,71],
+    [0,23,4,-3,-8,4,6,12,5,9],
+    [2,4,5,1,98,34,1,23,12,65],
+    [0,1,1,2,3,5,8,13,21,34]
 ]
 
-h = eigvals(a,8)
+# a  = [
+#     [2,3,1,0.5,4],
+#     [4,5,7,0.1,1],
+#     [5,3,6,19.2,9],
+#     [1,4,1,4,7],
+#     [3,1,6,2,6]
+# ]
+
+# a = [
+#     [2,3,1,0.5,4],
+#     [4,5,7,0.1,1],
+#     [5,3,6,19.2,9],
+#     [1,4,1,4,7],
+#     [3,1,6,2,6]
+# ]
+
+h = eigvals(a,400)
 
 for row in h:
     print(row)
 
-# q,r = qrdecomp(a)
 
-
-# for row in c:
-#     print(row)
-
-# print("###########")
-# d = mp.multiply_matrix(c, b)
-# print("###########")
-# for row in d:
-#     print(row)
-
-
-# for row in b:
-#     print(row)
-
-# print("###########")
-
-# d = mp.transpose(b)
-
-# for row in d:
-#     print(row)
-
-# print("###########")
-
-# c = mp.inverse(b)
-
-# for row in c:
-#     print(row)
-
-# print("###########")
 
 
 
