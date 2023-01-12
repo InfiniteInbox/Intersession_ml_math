@@ -2,6 +2,8 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
 
 
 \title{An Exploration into Linear Algebra}
@@ -33,8 +35,6 @@
 \begin{document}
 \maketitle
 
-
-
 \section{Basic Matrix Code}
 
 To begin, we have will create code that represents matrices and
@@ -43,7 +43,28 @@ multiplying, and adding.
 
 We will utilise python to do so. Python has a data structure known as a "list" or an "array."
 These are essentially a collection of indexed data than can be manipulated. Lists may contain sublists; it is in this way
-that we can represent a "matrix" in python, for indeed, a matrix containes
+that we can represent a "matrix" in python, for indeed, a matrix is nothing but a collection of row/column vectors, which themselves
+can be represented as an individual python lists. 
+
+We have decided to represent a matrix as a collection of row vectors.
+
+For example consider the following matrix, $ A \in \mathbb{R}^{m\times n} $: 
+
+\begin{equation*}
+    A =
+\begin{bmatrix}
+a_{1}  & a_{2} & a_{3} & ... & a_{n}\\
+b_{1}  & b_{2} & b_{3} & ... & b_{n}\\
+...  & ...& ... & ... & ...\\
+m_{1}  & m_{2} & m_{3} & ... & m_{n}\\
+\end{bmatrix}
+\end{equation*}
+
+with $m$ rows and $n$ columns. We choose to represent the same matrix, $A$ pythonically in the following way:
+
+\begin{lstlisting}
+    
+\end{lstlisting}
 
 \subsection{Matrix Multiplication}
 
