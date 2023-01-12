@@ -7,7 +7,7 @@
 
 
 \title{An Exploration into Linear Algebra}
-\author{Yash Money, Imran Iftikar}
+\author{Yash Money, Imran "Vince McMath" Iftikar}
 \date{Idk man, I just work here}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
@@ -42,9 +42,9 @@ performs elementary matrix operations, such as computing the inverse,
 multiplying, and adding. 
 
 We will utilise python to do so. Python has a data structure known as a "list" or an "array."
-These are essentially a collection of indexed data than can be manipulated. Lists may contain sublists; it is in this way
+These are essentially a collection of indexed data that can be manipulated. Lists may contain sublists; it is in this way
 that we can represent a "matrix" in python, for indeed, a matrix is nothing but a collection of row/column vectors, which themselves
-can be represented as an individual python lists. 
+can be represented as an individual python list. 
 
 We have decided to represent a matrix as a collection of row vectors.
 
@@ -60,249 +60,229 @@ m_{1}  & m_{2} & m_{3} & ... & m_{n}\\
 \end{bmatrix}
 \end{equation*}
 
-with $m$ rows and $n$ columns. We choose to represent the same matrix, $A$ pythonically in the following way:
+with $m$ rows and $n$ columns. We choose to represent the same matrix, $A$ pythonically in the following way: \newline
 
 \begin{lstlisting}
+array = [
+    [a1, a2, a3, ..., aN],
+    [b1, b2, b3, ..., bN],
+    [c1, c2, c3, ..., cN],
+    ...,
+    [m, m2, m3, ..., mN],
+]    
+\end{lstlisting}
 
+In this way, each sublist is a row of the matrix. 
 
+In the following we, will discuss how to code basic matrix operations using this data structure.
+
+\subsection{Multiplying a Matrix by a Scalar}
+
+One of the most crucial elements of matrix arithmetic is the ability to multiply a given matrix by a scalar. 
+When doing this, the following will hold true:
+
+\begin{equation*}
+    \forall \lambda \in \mathbb{R}, \forall A \in \mathbb{R}^{m\times n},  \lambda A = 
+    \begin{bmatrix}
+        \lambda a_{1}  & \lambda a_{2} &  \lambda a_{3} & ... & \lambda a_{n}\\
+        \lambda b_{1}  & \lambda b_{2} & \lambda b_{3} & ... & \lambda b_{n}\\
+        ...  & ...& ... & ... & ...\\
+        \lambda m_{1}  & \lambda m_{2} & \lambda m_{3} & ... & \lambda m_{n}\\
+    \end{bmatrix},
+\end{equation*}
+
+This is a rather simple problem to tackle. Simply, we iterate through each row of the matrix, and then through each
+element (column) within that row, multiplying each entry by a given $\lambda$ as we iterate. 
+This produces a matrix that has been multiplied by lambda. The code is as follows: \newline
+
+\begin{lstlisting}
+def matrix_by_scalar(matrix1, scalar_quantity):
     
+    '''
+    TAKES: 
+        A matrix of the form outlined above, matrix1
+        A scalar_quantity by which the matrix will be multiplied
+    RETURNS:
+        A matrix of the form outlined above
+    '''
+    try:
+        if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)): 
+        # O(1) we wcheck if the scalar element is a valid real number; if not, we raise an error.
+
+            return  list([element * scalar_quantity for element in row] \
+                for row in matrix1) # O(n**2) This comprehension multiplies each element of each row by the scalar and thus has a time complexity of n**2
+    
+        else: raise ValueError(f"Argument passed: '{scalar_quantity}'. Error: Expected argument of type 'int' or 'float' ") # error raised
+    except: # In Case something goes wrong; biggest error here is the potential for incorrect args passed
+        print("something went wrong - likely the matrix argument was incorrect") 
+
 \end{lstlisting}
 
-\subsection{Matrix By Scalar}
+\subsection{Adding Two Matrices}
+
+The addition of matrices is an elementwise one, and therefore it is easy to implemenent iteratively and makes lots of intuiative sense. 
+What is meant by elementwise is that we can handle each element individually; in the case of matrix addition, 
+we add each element of a given matrix to the corresponding element of a separate matrix. We can assert that the matrices must 
+therefore be the of the same dimension to be added. 
+
+Essentially, we have the following for $ \forall A, B \in \mathbb{R}^{m\times n}, $ where $i = 1,...,m$  and $j = 1,...,n$      
+
+\begin{eqnarray*}
+    A + B & = & \begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
+        A_{2,1} & A_{2,2} & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        A_{i,1} & A_{i,2} & ... & A_{i,j}
+    \end{bmatrix} + \begin{bmatrix}
+        B_{1,1}  & B_{1,2} & ... & B_{1,j}\\
+        B_{2,1} & B_{2,2} & ... & B_{2,j}\\
+        ... & ... & ... & ... \\
+        B_{i,1} & B_{i,2} & ... & B_{i,j}
+    \end{bmatrix} \\
+    & = & \begin{bmatrix}
+        A_{1,1} + B_{1,1} & A_{1,2} + B_{1,2} & ... & A_{1,j} + B_{1,j} \\
+        A_{2,1} + B_{2,1} & A_{2,2} + B_{2,2} & ... & A_{2,j} + B_{2,j} \\
+        ... & ... & ... & ... & \\
+        A_{i,1} + B_{i,1} & A_{i,2} + B_{i,2} & ... & A_{i,j} + B_{i,j} \\
+    \end{bmatrix}
+\end{eqnarray*}
+
+The code looks as follows:
 
 \begin{lstlisting}
-  def matrix_by_scalar(matrix1, scalar_quantity):
+def add_matrices(mat1, mat2): 
 
-  if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)): # O(1) checks if the second arg is valid
+    '''
+    TAKES:
+        two matrices of the standard form outlined previously, mat1 and mat2
+            They must be of the same dimensions
+    RETURNS:
+        A single matrix of the same dimensions as mat1 and mat2, where this matrix is the sum of mat1 and mat2
+    '''
 
-      return  list([element * scalar_quantity for element in row] \
-              for row in matrix1) # O(n**2) Multiplies each element of each row by the scalar and thus has a time complexity of n**2
-  
-  else: raise ValueError(f"Argument passed: '{scalar_quantity}'. Error: Expected argument of type 'int' or 'float' ") # error raised
+    if (len(mat1) == (len(mat2)) and (len(mat1[0]) == len(mat2[0]))): # check to see if possible to add the two lists, as their dimensions must be the same
 
-  # full time O(n**2)
-\end{lstlisting}
-
-\subsection{Adding Matricies}
-
-\begin{lstlisting}
-  def add_matrices(mat1, mat2): 
-
-    if (len(mat1) == (len(mat2)) and (len(mat1[0]) == len(mat2[0]))): # check to see if possible to add the two lists. constant time i think
-
-        # the following is a rather long list comprehension. it just adds each row and col of the two lists together
+        '''
+        The following is just a long list comprehension that iterates through each matrix and adds corresponding elements. It then appends these to "l", which is what is ultimately what is returned
+        '''
         # basically just two for loops
-        l = list([mat1[row][col]+mat2[row][col] \
-            for col in range(len(mat1[0]))] \
-            for row in range(len(mat1))) # O(n**2)
-        return l
-    
-    else:
+        l = list([mat1[row][col]+mat2[row][col] \ 
+            for col in range(len(mat1[0]))] \ 
+            for row in range(len(mat1)))
+        return l 
+        # Intuitively subtraction is very similar: the "+" must be turned to a "-"
+
+    else: # if the matrices are not of the same size.
         raise ValueError("Args are different size and thus cannot be added")
-    
-    # full time O(n**2)
+
 \end{lstlisting}
 
-\subsection{Subtracting Matricies}
+This code will hold for subtraction as well, because of the following identity:
+
+\begin{eqnarray*}
+    A - B & = & \begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
+        A_{2,1} & A_{2,2} & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        A_{i,1} & A_{i,2} & ... & A_{i,j}
+    \end{bmatrix} - \begin{bmatrix}
+        B_{1,1}  & B_{1,2} & ... & B_{1,j}\\
+        B_{2,1} & B_{2,2} & ... & B_{2,j}\\
+        ... & ... & ... & ... \\
+        B_{i,1} & B_{i,2} & ... & B_{i,j}
+    \end{bmatrix} \\
+    & = & \begin{bmatrix}
+        A_{1,1} - B_{1,1} & A_{1,2} - B_{1,2} & ... & A_{1,j} - B_{1,j} \\
+        A_{2,1} - B_{2,1} & A_{2,2} - B_{2,2} & ... & A_{2,j} - B_{2,j} \\
+        ... & ... & ... & ... & \\
+        A_{i,1} - B_{i,1} & A_{i,2} - B_{i,2} & ... & A_{i,j} - B_{i,j} \\
+    \end{bmatrix}
+\end{eqnarray*}
+
+where $ \forall A, B \in \mathbb{R}^{m\times n}, $ and $i = 1,..., m$, $j = 1,..., n$.
+
+This implies that we must merely change the elementwise addition in our code to subtraction in order to create
+a function that subracts two matrices.
+
+\subsection{Transpose of a Matrix}
+
+The tranpose of a matrix is a modification to its structure such that rows become columns and vice versa. That is, the first row of a given matrix
+$A$ will be the first column of it's transpose, $A^{T}$, the second row of $A$ will be the second column of $A^{T}$, and so forth and so on.
+\newline
+\begin{eqnarray*}
+    A &=& \begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
+        A_{2,1} & A_{2,2} & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        A_{i,1} & A_{i,2} & ... & A_{i,j}
+    \end{bmatrix} \in \mathbb{R}^{m\times n}, i=1,...,\text{ and }j=1,...,n
+    \\
+    \\
+    \text{Then,}
+    \\
+    \\
+    A^{T} &=& \begin{bmatrix}
+        A_{1,1}  & A_{2,1} & ... & A_{i,1}\\
+        A_{1,2} & A_{2,2} & ... & A_{i,2}\\
+        ... & ... & ... & ... \\
+        A_{1,j} & A_{2,j} & ... & A_{i,j}
+    \end{bmatrix} \in \mathbb{R}^{m\times n}, i=1,...,\text{ and }j=1,...,n
+\end{eqnarray*}
+
+In the case of square matrices, we can state the matrix has been "flipped" over it's main diagonal, 
+or the diagonal elements running from top-left to bottom-right.
+\newline
+The transpose, as with matrix addition/subtraction and multiplying by a scalar, is rather trivial to implement. 
+We iterate through the columns of a matrix, and return them to the user as rows of a new matrix, which is the tranpose. 
+In regards to greabbing the columns of a matrix: python provides no way to index a column as simply as one can index a row. 
+This is because, as we have represented matrices with row vectors, the columns are comprised of elements from mutliple different rows. 
+Therefore, we construct a function that enables us to quickly "grab" a column from a matrix given its index. 
 
 \begin{lstlisting}
-  def subtract_matrices(mat1, mat2): # subtracts second term from first
+def get_col(matrix_2d, _index):
 
-    if (len(mat1) == (len(mat2)) and (len(mat1[0]) == len(mat2[0]))): # check to see if possible to add the two lists. constant time i think
+    return list(row[_index] for row in matrix_2d) # O(n) this simply grabs the column from the specified index. 
 
-        # the following is a rather long list comprehension. it just adds each row and col of the two lists together
-        # basically just two for loops
-        l = list([mat1[row][col]-mat2[row][col] \
-            for col in range(len(mat1[0]))] \
-            for row in range(len(mat1))) # O(n**2)
-        return l
+    # full time O(n)
 
-    else:
-        raise ValueError("Args are different size and thus cannot be subtraction")
-    
-    # full time, O(n**2)
-\end{lstlisting}
-
-\subsection{Transpose of a matrix}
-
-\begin{lstlisting}
-  def transpose(matrix):
+def transpose(matrix):
 
     new_array = [get_col(matrix, i) for i in range(len(matrix[0]))] # O(n) and nested O(n), becomes O(n**2). takes a column and makes it a row
     return new_array
 
-    # full time O(n**2)
 \end{lstlisting}
 
-\subsection{Echelon}
+\subsection{Row Reduction: Echelon/Upper Triangle Form}
 
-\begin{lstlisting}
-  def echelon(matrix): 
-    
-    for col_index in range(len(matrix[0])): # Indiv O(n), Overall (n**3) the formula I devised uses columns, so I start with that. 
-        
-        col = get_col(matrix, col_index) # O(n) we grab the column using the index from the above for loop
+\subsection{Row Reduction: Row Echelon Form (REF)}
 
-        '''
-        
-        the following bit of code looks for places where there might be zeroes in the diagonal.
-        if there are, and we do not handle for it, we get a dividing by zero error
+\subsection{Row Reduction: Reduced Row Echelon Form (RREF)}
 
-        thus, the following code is quite necessary.  
-        
-        '''
-        if col_index <= len(matrix): # O(1) we only need to look for zeroes in the first square - that is, if the matrix is longer than tall, it is uncessary to check all columns
+\subsection{Finding the Determinant}
 
-            if all((i == 0) for i in col[col_index:]): #O(n) if the entire column is filled with zeroes, we call continue and the program returns to the initial for loop, and goes to the next column
-                continue 
-            
-            elif col[col_index] == 0: # O(1) if one of the elements on the diagonal is zero - this is where the dividing by zero error occurs so we need to handle this
-                ''' 
-                here we iterate through all of the rows below the diagonal. 
-                if we find a row that doesn't contain a zero in the diagonal column index, 
-                we will swap them
-                '''
-                for i in range(len(col[col_index:])): #O(n) 
-                    if col[col_index:][i] != 0: # O(1)
-                        row_idx = col_index+i # O(1)
-                        break 
-                
-                # the below line of code simple swaps the rows
-                matrix[col_index], matrix[row_idx] = matrix[row_idx], matrix[col_index] # O(1)
+\subsection{Inverting a Matrix}
+
+\subsection{Multiplying Two Matrices}
+
+\section{Vector(Sub)Spaces Pythonically}
+
+\subsection{General Introduction to Vector Subspaces}
+
+A vector space is special type of a group that contains both an inner and outer operation, which are addition and multiplication by a scalar, respectively.
 
 
-        '''
-        the following for loop is where the actual formula happens
-        the algorithm works as follows:
+\subsection{Issues when Representing Subspaces Pythonically}
 
-        assume we have an array, 
-        we have the nth column and we want to make all elements of that column below 
-        the nth row into 0
+\subsection{Uses Basis Vectors}
 
-        say n =0 then we have:
-
-        c1 = [           desired_c1 = [
-              3                         3
-              4                         4
-              3                         0
-              7                         0
-              2                         0
-                ]                         ]
-        
-        we can achieve this via subtracting a scalar multiple of the row such that we get 0
-        ex. row 2. we can achieve row 1, col 2 equaling 0 by 
-        subtracting row 1 * matrix[row1_idx][col2_idx]/matrix[row1_idx][row_idx]
-        
-        '''
-        for row_index in range(len(col)): # O(n) we iterate through row of each colum we have grabbed earlier
-
-            '''
-            remember, we only want to turn the rows below
-            the diagonal into 0. thus, we check if the row is indeed one we one to turn into 0
-            if it is not, its idx will be less than the column idx
-            if that proves to be true, we will simple pass
-            '''
-
-            if row_index <= col_index: #O(1)n checks if the row is one we do not want to turn to 0
-                '''
-                the following if statement is unnecessary, as I could have explicity called:
-                    matrix[col_index][col_index] when I called denominator later
-                    matrix[col_index] when I call raw_subtractant_row later
-                    however, will keep this code for readability, as I find this easier to understand.
-                '''
-                if row_index == col_index: #O(1)
-                    denominator = matrix[row_index][col_index] #O(1)
-                    raw_subtractant_row = matrix[row_index] #O(1)
-                pass              
-
-            else:
-                '''
-                here we actually do the conversion to 0
-                this finds teh numerator of the scalar we will multiply the subtractant row by
-                then we will simply create the final subtractant row
-                then we simply subtract the two rows, resulting in a 0
-                we then replace the old row with the new one.                
-                '''
-                row_to_sub_from = matrix[row_index] # O(1)
-                numerator = matrix[row_index][col_index] #O(1)
-
-
-                subtractant = row_by_scalar(raw_subtractant_row, (numerator/denominator)) # O(n)
-                subbed_row = subtract_row(row_to_sub_from, subtractant) # O(1)
-
-                matrix[row_index] = subbed_row # O(1)
-    
-    return matrix
-    
-    # Full time: O(n**3)
-\end{lstlisting}
-
-\subsection{Row Echelon Form}
-
-\begin{lstlisting}
-  def ref(matrix):
-
-    # takes matrix of form outlined in flowerbox
-    # returns matrix of form outlined in flowerbox, but in ref form
-
-    # builds off of the echelon function, which merely produces an upper triangle
-    # ref turns that into an upper triangle such that the leading nonzero element of each row is 1
-    
-    matrix = echelon(matrix) # we make sure that the input is in upper triangle by applying echelon O(n**3)
-    # (this could be put in an if statement to potentially improve time)
-
-    mindim = min(len(matrix), len(matrix[0])) - 1 # here we find the minimum dimension of the matrix
-
-    for idx, row in enumerate(matrix): # we iterate through each row of the matrix and get its index as well O(n)
-        # enumerate is O(n) 
-        # for loop itself in O(n), so 2O(n) total or just O(n)
-
-        if idx > mindim: # if matrix is longer than wider, we want to finish without iterating through the lower levels
-            return matrix # we just return if that is the case, becuase this will be in ref form
-        if matrix[idx][idx] !=0: # if the leading element of each row is not 0
-            matrix[idx] = row_by_scalar(row, (1/row[idx])) # we will multiply the entire row by the inverse of the leading element O(n)
-
-    return matrix # returns the matrix
-
-    # Full time: O(n**3) with echelon at start, O(n**2 otherwise)
-\end{lstlisting}
-
-\subsection{Row Reduced Echelon Form}
-
-\begin{lstlisting}
-  def ref(matrix):
-
-    # takes matrix of form outlined in flowerbox
-    # returns matrix of form outlined in flowerbox, but in ref form
-
-    # builds off of the echelon function, which merely produces an upper triangle
-    # ref turns that into an upper triangle such that the leading nonzero element of each row is 1
-    
-    matrix = echelon(matrix) # we make sure that the input is in upper triangle by applying echelon O(n**3)
-    # (this could be put in an if statement to potentially improve time)
-
-    mindim = min(len(matrix), len(matrix[0])) - 1 # here we find the minimum dimension of the matrix
-
-    for idx, row in enumerate(matrix): # we iterate through each row of the matrix and get its index as well O(n)
-        # enumerate is O(n) 
-        # for loop itself in O(n), so 2O(n) total or just O(n)
-
-        if idx > mindim: # if matrix is longer than wider, we want to finish without iterating through the lower levels
-            return matrix # we just return if that is the case, becuase this will be in ref form
-        if matrix[idx][idx] !=0: # if the leading element of each row is not 0
-            matrix[idx] = row_by_scalar(row, (1/row[idx])) # we will multiply the entire row by the inverse of the leading element O(n)
-
-    return matrix # returns the matrix
-
-    # Full time: O(n**3) with echelon at start, O(n**2 otherwise)
-
-\section{Representing Subspaces Pythonically}
 
 \section{Representing Linear Mappings Pythonically}
 
 \section{More Advanced Matrix Operations}
 
-\subsection{Solving Homogeneous Matricies}
+\section{Projections}
+
+\subsection{Solving Homogeneous Systems}
 
 \subsection{Finding Eigenvalues and Eigenvectors Of A Matrix}
 

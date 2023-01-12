@@ -44,14 +44,24 @@ known bugs:
 ######### Main
 
 def matrix_by_scalar(matrix1, scalar_quantity):
+    
+    '''
+    TAKES: 
+        A matrix of the form outlined above, matrix1
+        A scalar_quantity by which the matrix will be multiplied
+    RETURNS:
+        A matrix of the form outlined above
+    '''
+    try:
+        if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)): 
+        # O(1) we wcheck if the scalar element is a valid real number; if not, we raise an error.
 
-    if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)): # O(1) checks if the second arg is valid
-
-        return  list([element * scalar_quantity for element in row] \
+            return  list([element * scalar_quantity for element in row] \
                 for row in matrix1) # O(n**2) Multiplies each element of each row by the scalar and thus has a time complexity of n**2
     
-    else: raise ValueError(f"Argument passed: '{scalar_quantity}'. Error: Expected argument of type 'int' or 'float' ") # error raised
-
+        else: raise ValueError(f"Argument passed: '{scalar_quantity}'. Error: Expected argument of type 'int' or 'float' ") # error raised
+    except:
+        print("")
     # full time O(n**2)
 
 def add_matrices(mat1, mat2): 
