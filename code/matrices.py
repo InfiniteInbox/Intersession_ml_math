@@ -39,9 +39,13 @@ known bugs:
 
 ######### Dependencies
 
-''' none '''
+import copy
 
 ######### Main
+
+def matrixcopy(matrix):
+
+    return [row for row in matrix]
 
 def matrix_by_scalar(matrix1, scalar_quantity):
     
@@ -406,93 +410,6 @@ def make_identity(dim):
     return l # returns the needed list
     # full time: O(n**2)
 
-def inverse(matrix): 
-
-    # takes a matrix of form outlined in flowerbox
-    # returns a matrix of form outlined in flowerbox, that is the inverse of the original martix
-
-    '''
-    finds the inverse of a matrix, uses very similar code to echelon
-    it takes reduces a matrix to upper triangle and applies the same transforms to an indentity matrix
-    it then reflects both of them, and puts the reflect matrix into upper triangle as well, and also
-    applies the changes to the identity matrix. we reflect again, then we divide each each diagonal
-    and apply that to the identity as well. the original matrix becomes an identity matrix,
-        array = [
-                [1,0,0,0...],
-                [0,1,0,0...],
-                [0,0,1,0...],
-                [0,0,0,0...1]
-        ]
-    and the identity matrix we initialized becomes the matrices inverse. we return the identity matrix
-    
-    '''
-
-    if len(identify_pivots(matrix)) != len(matrix):
-        return False
-
-    identity = make_identity(len(matrix)) # O(n**2) creates an identity matrix
-
-    for i in range(2): # O(1), we run through this twice, because we upper triangle and reflect twice
-
-        ''' the following code is copypastad from echelon save for a few lines
-        so consult echelon for more detailed documentation'''
-        
-        for col_index in range(len(matrix[0])): #O(n) this first for loop handles zeroes that might potentially lead to div by 0 errors
-            col = get_col(matrix, col_index) # O(n)
-
-            if col_index <= len(matrix): # O(1)
-
-                if all((i == 0) for i in col[col_index:]): #O(n)
-                    continue 
-                
-                elif col[col_index] == 0: # O(1)
-                    for i in range(len(col[col_index:])): #O(n)
-                        if col[col_index:][i] != 0: # O(1)
-                            row_idx = col_index+i # O(1)
-                            break 
-                    
-                    matrix[col_index], matrix[row_idx] = matrix[row_idx], matrix[col_index] # O(n)
-
-
-            for row_index in range(len(col)): # O(n)
-
-                if row_index <= col_index: #O(1)
-                    if row_index == col_index: #O(1)
-                        denominator = matrix[row_index][col_index] #O(1)
-                        raw_subtractant_row = matrix[row_index] #O(1)
-                        raw_subtractant_row_identity = identity[row_index] # O(1) this line is one of the main ones that differs from echelon
-                    pass              
-
-                else:
-
-                    numerator = matrix[row_index][col_index] #O(1)
-
-                    row_to_sub_from = matrix[row_index] # O(1)
-                    subtractant = row_by_scalar(raw_subtractant_row, (numerator/denominator)) # O(n)
-                    subbed_row = subtract_row(row_to_sub_from, subtractant) # O(1)
-                    matrix[row_index] = subbed_row
-
-                    
-                    '''
-                    the following three lines are mainly what differs between this and echelon. it simply takes
-                    the operation we did on the row of the argument "matrix" and does it to the row of the identity
-                    '''
-                    subtractant_identity = row_by_scalar(raw_subtractant_row_identity, (numerator/denominator))
-                    subbed_row1 = subtract_row(identity[row_index], subtractant_identity)
-                    identity[row_index] = subbed_row1  
-        
-        # the following reflects the matrices so that we can echelon both again. then it reflects it again so we can get back to the original matrix
-        matrix = reflect(matrix)
-        identity = reflect(identity)
-
-    # we divide by 1/the diagonal in each row of the matrix 
-    for i in range(len(matrix)):
-        identity[i] = row_by_scalar(identity[i], (1/matrix[i][i]))
-
-    return identity
-
-    # full time: O(n**3)
-
 def append_mat_right(mat1, mat2):
 
     # takes two matrices of form outlined in flowerbox, must be same size
@@ -500,13 +417,31 @@ def append_mat_right(mat1, mat2):
 
     # appends a matrix (mat2) to the right of another matrix (mat1) such that we have essentially created an augmented matrix
 
+    new = copy.deepcopy(mat1)
+
     if len(mat1) == len(mat2) and len(mat1[0]) == len(mat2[0]): # if the dimensions are compatinle
         for idx, row in enumerate(mat2): # we iterate throgh thhe second matrix O(n)
-            mat1[idx].extend(row) # and add it to the first via the extend fucntion, O(n)
+            new[idx].extend(row) # and add it to the first via the extend fucntion, O(n)
 
-    return mat1 # we return the augmented mat 1
+    return new # we return the augmented mat 1
 
     # full time O(n**2)
+
+def inverse(matrix):
+    
+
+    identity = make_identity(len(matrix))
+    dim_to_take = len(matrix[0])
+
+    matrix = append_mat_right(matrix, identity)
+    matrix = rref(matrix)
+
+    inverse = list()
+
+    for row in matrix:
+        inverse.append(row[-dim_to_take:])
+
+    return inverse
 
 def find_transition(og_base, new_base, columned=False):
 
@@ -675,23 +610,41 @@ def diags(matrix):
 
 # print(inverse(a))
 
-a = [
-[0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
-[-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
-[0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
-[0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]
-]
+# a = [
+# [0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
+# [-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
+# [0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
+# [0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]
+# ]
 
-b = [
-    [5.551115123125783e-16, -0.40824829046386274, 0.8164965809277263, 0.4082482904638622],
-[-0.8660254037844399, 0.28867513459481337, 0.28867513459481176, -0.2886751345948102],
-[ -0.40824829046386285, -0.8164965809277264, -0.40824829046386285, -6.2803698347351e-16],
-[ -0.28867513459481287, 0.28867513459481275, -0.28867513459481287, 0.8660254037844385],
-]
+# q = [
+#     [0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
+# [-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
+# [0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
+# [0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]
+# ]
 
-b = mround(b,4)
+# h = inverse(q)
 
-c = multiply_matrix(a,b)
+# for row in h:
+#     print(row)
 
-for row in c:
-    print(row)
+# # b = [
+#     [5.551115123125783e-16, -0.40824829046386274, 0.8164965809277263, 0.4082482904638622],
+# [-0.8660254037844399, 0.28867513459481337, 0.28867513459481176, -0.2886751345948102],
+# [ -0.40824829046386285, -0.8164965809277264, -0.40824829046386285, -6.2803698347351e-16],
+# [ -0.28867513459481287, 0.28867513459481275, -0.28867513459481287, 0.8660254037844385],
+# ]
+
+
+# b = inverse(a)
+
+# b = mround(b, 3)
+
+# for row in b:
+#     print(row)
+
+# c = multiply_matrix(a,b)
+
+# for row in c:
+#     print(row)

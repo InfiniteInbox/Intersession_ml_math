@@ -57,6 +57,7 @@ INPUT AND DATA TYPES:
 
 import matrices as mp
 import trig
+import copy
 
 #################### GLOBAL VARS ####################
 
@@ -296,11 +297,7 @@ def qrdecomp(matrix):
 
     q = mp.transpose(q)
     qinv = mp.inverse(q.copy())
-    for row in q:
-        print(row)
-    # for row in mp.mround(qinv,4):
-    #     print(row)
-    # r = mp.multiply_matrix(qinv,mp.transpose(matrix))
+    r = mp.multiply_matrix(qinv,mp.transpose(matrix))
     return q,r 
 
 def eigvals(matrix, iterations = 1000, tolerance=6):
@@ -320,6 +317,7 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
 
     if isuppertriangle(activemat, tolerance):
         return mp.diags(activemat)
+
 
     else:
 
@@ -361,19 +359,14 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
 #     [0,1,1,2,3,5,8,13,21,34]
 # ]
 
-a = [
-    [0,-1,1,1],
-    [-1,1,-2,3],
-    [2,-1,0,0],
-    [1,-1,1,0]
-]
 
-b = [[0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
-[-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
-[0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
-[0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]]
 
-c = mp.mround(mp.rref(b), 4)
+# b = [[0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
+# [-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
+# [0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
+# [0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]]
+
+# c = mp.mround(mp.rref(b), 4)
 
 
 
