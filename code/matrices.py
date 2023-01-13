@@ -641,6 +641,7 @@ def solve_homogeneous(coef_matrix):
     # returns a matrix using the minus 1 trick to solve homogeneous linear systems
 
     coef_matrix = rref(coef_matrix) # takes the rref of the coefficient matrix (system of linear eq) O(n**3)
+    print(coef_matrix)
     pivotcols = identify_pivots(coef_matrix) # finds the pivot columns of the rref matrix O(n**2)
     notpiv_cols = list() # since this function is called because of different size dimension matricies, there are going to be necessary added piv-columns
     for i in range(len(coef_matrix[0])): # iterates through the columns O(n)
@@ -653,6 +654,7 @@ def solve_homogeneous(coef_matrix):
     for idx in notpiv_cols: #Iterate through the non pivot columns
         coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) # by the minus 1 trick, we insert a row with minus 1 in the nth index to preserve diagonality
     coef_matrix = transpose(coef_matrix) # we transpose the matrix
+    print(coef_matrix)
     final = [coef_matrix[idx] for idx in notpiv_cols] # we return the solution as a square matrix  
     return final
 
@@ -661,6 +663,7 @@ def solve_homogeneous(coef_matrix):
 def diags(matrix):
 
     return [row[idx] for idx, row in enumerate(matrix)]
+
 
 # a = [
 #     [5,43,1],
