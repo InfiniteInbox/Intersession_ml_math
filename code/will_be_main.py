@@ -296,7 +296,11 @@ def qrdecomp(matrix):
 
     q = mp.transpose(q)
     qinv = mp.inverse(q.copy())
-    r = mp.multiply_matrix(qinv,mp.transpose(matrix))
+    for row in q:
+        print(row)
+    # for row in mp.mround(qinv,4):
+    #     print(row)
+    # r = mp.multiply_matrix(qinv,mp.transpose(matrix))
     return q,r 
 
 def eigvals(matrix, iterations = 1000, tolerance=6):
@@ -312,7 +316,8 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
         activemat = mp.multiply_matrix(r,q)
 
             # istriangle = isuppertriangle(activemat, tolerance)
-        
+
+
     if isuppertriangle(activemat, tolerance):
         return mp.diags(activemat)
 
@@ -363,8 +368,30 @@ a = [
     [1,-1,1,0]
 ]
 
-c = eigvals(a, 5000)
-print(c)
+b = [[0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
+[-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
+[0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
+[0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]]
+
+c = mp.mround(mp.rref(b), 4)
+
+
+
+# q, r = qrdecomp(a)
+
+# for row in q:
+#     print(row)
+# print("#################")
+# for row in mp.mround(r, 4):
+#     print(row)
+# print("#################")
+# for row in mp.multiply_matrix(q,r):
+#     print(row)
+
+# c = eigvals(a, 1900)
+
+# for val in c:
+#     print(val)
 
 # a  = [
 #     [2,3,1,0.5,4],
