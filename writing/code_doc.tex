@@ -7,8 +7,8 @@
 
 
 \title{An Exploration into Linear Algebra}
-\author{Yash Money, Imran "Vince McMath" Iftikar}
-\date{Idk man, I just work here}
+\author{Yash Money, Vince McMath}
+\date{It's Too Early for This}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -41,7 +41,7 @@ To begin, we have will create code that represents matrices and
 performs elementary matrix operations, such as computing the inverse, 
 multiplying, and adding. 
 
-We will utilise python to do so. Python has a data structure known as a "list" or an "array."
+We will utilise Python to do so. Python has a data structure known as a "list" or an "array."
 These are essentially a collection of indexed data that can be manipulated. Lists may contain sublists; it is in this way
 that we can represent a "matrix" in python, for indeed, a matrix is nothing but a collection of row/column vectors, which themselves
 can be represented as an individual python list. 
@@ -254,7 +254,146 @@ def transpose(matrix):
 
 \subsection{Row Reduction: Echelon/Upper Triangle Form}
 
+One of the most important matrix-manipulations is the ability to perform elementary "row operations" upon a matrix. 
+That is, multiplying a row by a scalar, swapping the position of two rows in a matrix, and adding/subtracting a scalar multiple of one row to/from another. 
+These operations have incredibly useful properties, and are widely used to calculate determinants and inverses of matrices, and 
+additionally are used to solved systems of linear equations using matrices. 
+
+These row operations allow one to effectively mutate a matrix into one of many various forms; for example, we can row reduce such that
+what we are left with is of the "upper triangle" form, in which all elements not above or in the main diagonal are 0. 
+
+This form is known as "echelon" form, and the process to find it is called "Gaussian Elimination."
+
+We begin the algorithm by swapping rows that need to be swapped. 
+
+\begin{lstlisting}
+def echelon(matrix): 
+    
+    # we will iterate through the columns
+    for col_index in range(len(matrix[0])): 
+
+        col = get_col(matrix, col_index) #we grab the column using the index from the above for loop
+
+        '''
+        the following bit of code looks for places where there might be zeroes in the diagonal.
+        if there are, and we do not handle for it, we will get a divinding by zero error
+        We then swap the rows such that we can proceed
+
+        thus, the following code is quite necessary.  
+        '''
+
+        if col_index <= len(matrix): # O(1) we only need to look for zeroes in the first square - that is, if the matrix is longer than tall, it is uncessary to check all columns
+
+            if all((i == 0) for i in col[col_index:]): #O(n) if the entire column is filled with zeroes, we call continue and the program returns to the initial for loop, and goes to the next column
+                continue 
+            
+            elif col[col_index] == 0: # O(1) if one of the elements on the diagonal is zero - this is where the dividing by zero error occurs so we need to handle this
+                ''' 
+                here we iterate through all of the rows below the diagonal. 
+                if we find a row that doesn't contain a zero in the diagonal column index, 
+                we will swap them
+                '''
+                for i in range(len(col[col_index:])): #O(n) 
+                    if col[col_index:][i] != 0: # O(1)
+                        row_idx = col_index+i # O(1)
+                        break 
+                
+                # the below line of code simple swaps the rows
+                matrix[col_index], matrix[row_idx] = matrix[row_idx], matrix[col_index] # O(1)
+\end{lstlisting}
+
+Now that rows have been sufficiently swapped, we may begin subtracting scalar multiples of rows from rows below it. 
+This enables us to achieve a zero in the desired spot. We will continue in the for loop that we currenly operate in. 
+
+\begin{lstlisting}
+    '''
+        the following for loop is where the actual formula happens
+        the algorithm works as follows:
+
+        assume we have an array, 
+        we have the nth column and we want to make all elements of that column below 
+        the nth row into 0
+
+        say n = 1 then we have:
+
+        c1 = [           desired_c1 = [
+              3                         3
+              4                         4
+              3                         0
+              7                         0
+              2                         0
+                ]                         ]
+        
+        we can achieve this via subtracting a scalar multiple of the row such that we get 0
+        ex: row 2. we can achieve row 1, col 2 equaling 0 by 
+        subtracting row 1 * matrix[row1_idx][col2_idx]/matrix[row1_idx][row_idx]
+        
+        '''
+        for row_index in range(len(col)): # O(n) we iterate through row of each colum we have grabbed earlier
+            '''
+            remember, we only want to turn the rows below
+            the diagonal into 0. thus, we check if the row is indeed one we one to turn into 0
+            if it is not, its idx will be less than the column idx
+            if that proves to be true, we will simple pass
+            '''
+
+            if row_index <= col_index: #O(1)n checks if the row is one we do not want to turn to 0
+                '''
+                the following if statement is unnecessary, as I could have explicity called:
+                    matrix[col_index][col_index] when I called denominator later
+                    matrix[col_index] when I call raw_subtractant_row later
+                    however, will keep this code for readability, as I find this easier to understand.
+                '''
+                if row_index == col_index: #O(1)
+                    denominator = matrix[row_index][col_index] #O(1)
+                    raw_subtractant_row = matrix[row_index] #O(1)
+                pass              
+
+            else:
+                '''
+                here we actually do the conversion to 0
+                this finds teh numerator of the scalar we will multiply the subtractant row by
+                then we will simply create the final subtractant row
+                then we simply subtract the two rows, resulting in a 0
+                we then replace the old row with the new one.                
+                '''
+                row_to_sub_from = matrix[row_index] # O(1)
+                numerator = matrix[row_index][col_index] #O(1)
+
+                subtractant = row_by_scalar(raw_subtractant_row, (numerator/denominator)) # O(n)
+                subbed_row = subtract_row(row_to_sub_from, subtractant) # O(1)
+
+                matrix[row_index] = subbed_row # O(1)
+    
+    return matrix
+
+\end{lstlisting}
+
 \subsection{Row Reduction: Row Echelon Form (REF)}
+
+Consider a matrix that has been reduced such that it is in echelon form, where all elements below the main diagonal are 0. 
+It is possible to reduce a matrix further. Specifically, by identifying all non-zero diagonal elements and dividing the rows in which
+they appear by the element itself, we can get to a form similar to echelon form, but one where all non-zero diagonal elements will be 1. 
+This is "row-echelon" form.
+
+In other words, we can obtain the following, given $ A \in \mathbb{R}^{m\times n} $ and it is in echelon form:
+
+\begin{eqnarray*}
+    A & = & \begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
+        0 & A_{2,2} & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        0 & 0 & ... & A_{i,j}
+    \end{bmatrix} \\     
+    & \rightsquigarrow & \begin{bmatrix}
+        1  & A_{1,2} & ... & A_{1,j}\\
+        0 & 1 & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        0 & 0 & ... & 1
+    \end{bmatrix}
+\end{eqnarray*}
+
+It it is easy to turn a matrix in echelon form into one in row-echelon, as we must simply divide 
 
 \subsection{Row Reduction: Reduced Row Echelon Form (RREF)}
 
@@ -268,13 +407,51 @@ def transpose(matrix):
 
 \subsection{General Introduction to Vector Subspaces}
 
-A vector space is special type of a group that contains both an inner and outer operation, which are addition and multiplication by a scalar, respectively.
+A vector space is special type of a group that contains both an inner and outer
+operation, which are addition and multiplication by a scalar, respectively.
 
+Early on, we realized that it was impossible to represent an infinite series of elements as a vector space in python, for example $\mathbb{R}^{2}$. 
+We realized that we would have to have the user to insert a matrix representing that vector space. We created an umbrella class called "subspace".
+These are integral to representing linear mappings pythonically as these serve as our mapping 
+
+Our subspace class is very broad, the operations done in the class are more of a general operations as stated below
 
 \subsection{Issues when Representing Subspaces Pythonically}
 
-\subsection{Uses Basis Vectors}
+As I said earlier, we cannot express common vector spaces used in linear algebra and we had to settle for finite spaces. They would be in the form of:
 
+\subsection{Defining a Space with a Basis}
+
+The definition of a basis is the set of linearly independent vectors that span a space. 
+These have many useful applications when it comes to linear mapping. 
+
+\begin{eqnarray*}
+    U &=& span(\begin{bmatrix}
+        0 \\
+        1 \\
+        2
+    \end{bmatrix}, 
+    \begin{bmatrix}
+        1 \\
+        1 \\
+        2 
+    \end{bmatrix},
+    \begin{bmatrix}
+        2 \\
+        2 \\
+        4
+    \end{bmatrix})
+\end{eqnarray*}
+
+Basis Vector
+
+\begin{eqnarray*}
+    \begin{bmatrix}
+        0 \\
+        1 \\
+        2
+    \end{bmatrix}
+\end{eqnarray*}
 
 \section{Representing Linear Mappings Pythonically}
 

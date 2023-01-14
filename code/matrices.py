@@ -179,7 +179,7 @@ def echelon(matrix):
         we have the nth column and we want to make all elements of that column below 
         the nth row into 0
 
-        say n =0 then we have:
+        say n = 1 then we have:
 
         c1 = [           desired_c1 = [
               3                         3
@@ -190,12 +190,11 @@ def echelon(matrix):
                 ]                         ]
         
         we can achieve this via subtracting a scalar multiple of the row such that we get 0
-        ex. row 2. we can achieve row 1, col 2 equaling 0 by 
+        ex: row 2. we can achieve row 1, col 2 equaling 0 by 
         subtracting row 1 * matrix[row1_idx][col2_idx]/matrix[row1_idx][row_idx]
         
         '''
         for row_index in range(len(col)): # O(n) we iterate through row of each colum we have grabbed earlier
-
             '''
             remember, we only want to turn the rows below
             the diagonal into 0. thus, we check if the row is indeed one we one to turn into 0
@@ -225,8 +224,7 @@ def echelon(matrix):
                 '''
                 row_to_sub_from = matrix[row_index] # O(1)
                 numerator = matrix[row_index][col_index] #O(1)
-
-
+                
                 subtractant = row_by_scalar(raw_subtractant_row, (numerator/denominator)) # O(n)
                 subbed_row = subtract_row(row_to_sub_from, subtractant) # O(1)
 
