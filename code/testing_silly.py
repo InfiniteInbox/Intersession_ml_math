@@ -485,12 +485,8 @@
 # for row in c:
 #     print(row)
 
-def h(i):
+g = 14 + 2j
 
-    i = 1 * 12
+c = 3 * g
 
-    g = i/3
-
-    return g
-
-print(h(3))
+print(c)

@@ -302,7 +302,6 @@ def qrdecomp(matrix):
 
 def eigvals(matrix, iterations = 1000, tolerance=6):
 
-    eigs = list()
     activemat = matrix.copy()
 
     istriangle = False
@@ -315,7 +314,11 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
             # istriangle = isuppertriangle(activemat, tolerance)
 
 
+    # g = isuppertriangle(activemat, tolerance)
+    # return activemat
+
     if isuppertriangle(activemat, tolerance):
+
         return mp.diags(activemat)
 
 
@@ -346,19 +349,48 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
 
         return eigvals
 
-# a  = [
-#     [12,-51,4,4,6,7,1,2,9,12],
-#     [6,167,-68,23,12,34,12,3,12,3],
-#     [-4,24,-41,12,3,4,3,5,12,3],
-#     [21,3,4,12,3,4,12,3,4,1],
-#     [12,3,4,1,2,3,5,-6,12,-6],
-#     [123,4,6,2,3,-6,4,2,3,1],
-#     [23,4,2,876,1,24,-8,-2,3,71],
-#     [0,23,4,-3,-8,4,6,12,5,9],
-#     [2,4,5,1,98,34,1,23,12,65],
-#     [0,1,1,2,3,5,8,13,21,34]
+a  = [
+    [12,-51,4,4,6,7,1,2,9,12],
+    [6,167,-68,23,12,34,12,3,12,3],
+    [-4,24,-41,12,3,4,3,5,12,3],
+    [21,3,4,12,3,4,12,3,4,1],
+    [12,3,4,1,2,3,5,-6,12,-6],
+    [123,4,6,2,3,-6,4,2,3,1],
+    [23,4,2,876,1,24,-8,-2,3,71],
+    [0,23,4,-3,-8,4,6,12,5,9],
+    [2,4,5,1,98,34,1,23,12,65],
+    [0,1,1,2,3,5,8,13,21,34]
+]
+
+# a = [
+#     [0,-1,1,1],
+#     [-1,1,-2,3],
+#     [2,-1,0,0],
+#     [1,-1,1,0]
 # ]
 
+# h = mp.make_identity(10)
+# h = mp.matrix_by_scalar(h, 6.231)
+
+# b = mp.subtract_matrices(a, h)
+
+# print(mp.matrix_det(b))
+
+g = eigvals(a, 1000, 3)
+
+for val in g:
+    print(val)
+
+
+# q, r =  qrdecomp(a)
+
+# q = mp.mround(q, 3)
+
+# for row in q:
+#     print(row)
+
+# for val in a_eigs:
+#     print(val)
 
 
 # b = [[0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
