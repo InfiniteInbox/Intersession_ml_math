@@ -349,18 +349,68 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
 
         return eigvals
 
-a  = [
-    [12,-51,4,4,6,7,1,2,9,12],
-    [6,167,-68,23,12,34,12,3,12,3],
-    [-4,24,-41,12,3,4,3,5,12,3],
-    [21,3,4,12,3,4,12,3,4,1],
-    [12,3,4,1,2,3,5,-6,12,-6],
-    [123,4,6,2,3,-6,4,2,3,1],
-    [23,4,2,876,1,24,-8,-2,3,71],
-    [0,23,4,-3,-8,4,6,12,5,9],
-    [2,4,5,1,98,34,1,23,12,65],
-    [0,1,1,2,3,5,8,13,21,34]
-]
+'''PSUEDO CODE FOR FUNCTIONS TO CODE LATER'''
+
+'''
+DEF eigvecs(matrix):
+
+    FIND EIGVALS
+
+    EIGVEC DICT = {}
+
+    FOR eigvalue IN eigval_list:
+
+        CREATE IDENTITY
+        MULTIPLY IDENTITY BY eigvalue
+
+        SUBTRACT eigval*identity FROM matrix
+
+        SOLVE homogonous systems with matrix as coefs
+
+        EIGVEC DIC SET KEY TO eigvalue SET VALUE TO eigvec
+    
+    RETURN EIGVEC DICT
+'''
+
+'''
+
+def eigdecomp(matrix):
+
+    eigvecs(matrix)
+
+    create diag mat with eigvals
+     
+    create p with eigvecs
+
+    create p^-1 given p
+
+    return p, d, p^-1
+'''
+
+'''
+def svd(matrix):
+
+
+'''
+
+'''
+def rankk_approx(matrix)
+
+
+'''
+
+# a  = [
+#     [12,-51,4,4,6,7,1,2,9,12],
+#     [6,167,-68,23,12,34,12,3,12,3],
+#     [-4,24,-41,12,3,4,3,5,12,3],
+#     [21,3,4,12,3,4,12,3,4,1],
+#     [12,3,4,1,2,3,5,-6,12,-6],
+#     [123,4,6,2,3,-6,4,2,3,1],
+#     [23,4,2,876,1,24,-8,-2,3,71],
+#     [0,23,4,-3,-8,4,6,12,5,9],
+#     [2,4,5,1,98,34,1,23,12,65],
+#     [0,1,1,2,3,5,8,13,21,34]
+# ]
 
 # a = [
 #     [0,-1,1,1],
@@ -369,6 +419,16 @@ a  = [
 #     [1,-1,1,0]
 # ]
 
+a = [
+    [1,0,0],
+    [0,0,0],
+    [0,0,1]
+]
+
+b = mp.solve_homogeneous(a)
+
+print(b)
+
 # h = mp.make_identity(10)
 # h = mp.matrix_by_scalar(h, 6.231)
 
@@ -376,10 +436,10 @@ a  = [
 
 # print(mp.matrix_det(b))
 
-g = eigvals(a, 1000, 3)
+# g = eigvals(a, 4000, 3)
 
-for val in g:
-    print(val)
+# for val in g:
+#     print(val)
 
 
 # q, r =  qrdecomp(a)
