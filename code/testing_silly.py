@@ -485,14 +485,7 @@
 # for row in c:
 #     print(row)
 
-# g = 14 + 2j
+g = 14 + 2j
 
-# c = 3 * g
+c = 3 * g
 
-# print(c)
-
-c = {}
-
-c["reeee"] = "ooga booga"
-
-print(c)

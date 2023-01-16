@@ -57,7 +57,7 @@ def matrix_by_scalar(matrix1, scalar_quantity):
         A matrix of the form outlined above
     '''
     try:
-        if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)): 
+        if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)) or (isinstance(scalar_quantity, complex)): 
         # O(1) we wcheck if the scalar element is a valid real number; if not, we raise an error.
 
             return  list([element * scalar_quantity for element in row] \
@@ -65,7 +65,7 @@ def matrix_by_scalar(matrix1, scalar_quantity):
     
         else: raise ValueError(f"Argument passed: '{scalar_quantity}'. Error: Expected argument of type 'int' or 'float' ") # error raised
     except:
-        print("")
+        print("not an intiger")
     # full time O(n**2)
 
 def add_matrices(mat1, mat2): 
@@ -117,7 +117,7 @@ def row_by_scalar(row, scalar_quantity):
 
     # the functionality of this function is used in the echelon and inverse function.
 
-    if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)): # checks if argument 2 is valid
+    if (isinstance(scalar_quantity, int)) or (isinstance(scalar_quantity, float)) or (isinstance(scalar_quantity, complex)): # checks if argument 2 is valid
         return list((element*scalar_quantity) for element in row) # simple list comprehension. linear time, O(n)
     
     else: raise ValueError(" cannot multiply row by non-integer or non-float value") # raises erorr if arg2 is invalid
@@ -564,7 +564,11 @@ def mround(matrix, places=2):
 
     for idx, row in enumerate(matrix):
         for idx2, column in enumerate(row):
-            matrix[idx][idx2] = round(column, places)
+            if isinstance(matrix[idx][idx2], complex):
+                num = matrix[idx][idx2]
+                matrix[idx][idx2] = round(num.real, 2) + round(num.imag, 2) * 1j
+            else:
+                matrix[idx][idx2] = round(column, places)
 
     return matrix
 

@@ -349,26 +349,107 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
 
         return eigvals
 
-def eigvecs(matrix, valit = 1000, valtol = 6, vec_tol = 4):
+def eigvecs(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
 
-    eigval_list = eigvals(matrix, valit, valtol)
+    eigval_list = eigvals(matrix, eigvalitr, eigvaltol)
     matrix_size = len(matrix)
     eigvec_dict = {}
 
     for eigval in eigval_list:
         
+        if isinstance(eigval, complex):
+            eigval = (round(eigval.real, eigvaltol) + round(eigval.imag, eigvaltol)*1j)
+        else:
+            eigval = round(eigval, eigvaltol)
         idt = mp.make_identity(matrix_size)
         idt = mp.matrix_by_scalar(idt, eigval)
-        
         subtracted_mat = mp.subtract_matrices(matrix, idt)
+        # subtracted_mat = mp.mround(subtracted_mat, vec_tol)
+        subtracted_mat = mp.echelon(subtracted_mat)
         subtracted_mat = mp.mround(subtracted_mat, vec_tol)
 
         sln = mp.solve_homogeneous(subtracted_mat)
     
-        eigvec_dict[round(eigval, valtol)] = sln
+        eigvec_dict[eigval] = sln
     
+
     return eigvec_dict
 
+a  = [
+    [12,-51,4,4,6,7,1,2,9,12],
+    [6,167,-68,23,12,34,12,3,12,3],
+    [-4,24,-41,12,3,4,3,5,12,3],
+    [21,3,4,12,3,4,12,3,4,1],
+    [12,3,4,1,2,3,5,-6,12,-6],
+    [123,4,6,2,3,-6,4,2,3,1],
+    [23,4,2,876,1,24,-8,-2,3,71],
+    [0,23,4,-3,-8,4,6,12,5,9],
+    [2,4,5,1,98,34,1,23,12,65],
+    [0,1,1,2,3,5,8,13,21,34]
+]
+
+'''
+(140.60436929398335+18.87897367018305j)
+(140.60436929398335-18.87897367018305j)
+-101.11460777606418
+59.02591771013268
+(-43.66795120077649+13.277929689248026j)
+(-43.66795120077649-13.277929689248026j)
+42.48445591558337
+-26.148751028128796
+21.65112105816083
+6.229027933896394'''
+
+# a = [
+#     [4,2],
+#     [1,3]
+# ]
+
+g = eigvecs(a)
+
+for k, v in g.items():
+    print(f"{k}: {v}")
+
+
+
+# size= len(a)
+# eigval = (140.60436929398335+18.87897367018305j)
+# idt = mp.make_identity(size)
+# idt = mp.matrix_by_scalar(idt, eigval)
+# # for row in idt:
+# #     print(row)
+# subtracted_mat = mp.subtract_matrices(a, idt)
+
+# # for row in subtracted_mat:
+# #     print(row)
+
+# g = mp.echelon(subtracted_mat)
+# g = mp.mround(g, 4)
+# for row in g:
+#     print(row)
+# # 
+
+
+
+# print(mp.matrix_det(g))
+
+# for row in mp.mround(mp.rref(g),4):
+#     print(row)
+
+# sln = mp.solve_homogeneous(g)
+
+# print(sln)
+
+# print(round(d, 6))
+# subtracted_mat = mp.mround(subtracted_mat, 6)
+
+# for row in mp.mround(mp.echelon(subtracted_mat), 3):
+#     print(row)
+ 
+
+# b = eigvecs(a)
+
+# print(b)
 
 '''PSUEDO CODE FOR FUNCTIONS TO CODE LATER'''
 
