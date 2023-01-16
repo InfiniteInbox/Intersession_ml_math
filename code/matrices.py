@@ -585,6 +585,15 @@ def solve_homogeneous(coef_matrix):
     if notpiv_cols == []: # if the non-pivot columns are empty (in other words had total rank)
         return [0 for i in range(len(coef_matrix[0]))]
 
+    if len(coef_matrix) == len(coef_matrix[0]):
+
+        for idx in notpiv_cols:
+            coef_matrix[idx][idx] = -1
+        coef_matrix = transpose(coef_matrix)
+        final = [coef_matrix[idx] for idx in notpiv_cols]
+        return final
+
+
     for idx in notpiv_cols: #Iterate through the non pivot columns
         coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) # by the minus 1 trick, we insert a row with minus 1 in the nth index to preserve diagonality
     coef_matrix = transpose(coef_matrix) # we transpose the matrix

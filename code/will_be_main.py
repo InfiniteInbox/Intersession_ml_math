@@ -302,7 +302,7 @@ def qrdecomp(matrix):
 
 def eigvals(matrix, iterations = 1000, tolerance=6):
 
-    activemat = matrix.copy()
+    activemat = copy.deepcopy(matrix)
 
     istriangle = False
 
@@ -349,28 +349,28 @@ def eigvals(matrix, iterations = 1000, tolerance=6):
 
         return eigvals
 
-'''PSUEDO CODE FOR FUNCTIONS TO CODE LATER'''
+def eigvecs(matrix, valit = 1000, valtol = 6, vec_tol = 4):
 
-'''
-DEF eigvecs(matrix):
+    eigval_list = eigvals(matrix, valit, valtol)
+    matrix_size = len(matrix)
+    eigvec_dict = {}
 
-    FIND EIGVALS
+    for eigval in eigval_list:
+        
+        idt = mp.make_identity(matrix_size)
+        idt = mp.matrix_by_scalar(idt, eigval)
+        
+        subtracted_mat = mp.subtract_matrices(matrix, idt)
+        subtracted_mat = mp.mround(subtracted_mat, vec_tol)
 
-    EIGVEC DICT = {}
-
-    FOR eigvalue IN eigval_list:
-
-        CREATE IDENTITY
-        MULTIPLY IDENTITY BY eigvalue
-
-        SUBTRACT eigval*identity FROM matrix
-
-        SOLVE homogonous systems with matrix as coefs
-
-        EIGVEC DIC SET KEY TO eigvalue SET VALUE TO eigvec
+        sln = mp.solve_homogeneous(subtracted_mat)
     
-    RETURN EIGVEC DICT
-'''
+        eigvec_dict[round(eigval, valtol)] = sln
+    
+    return eigvec_dict
+
+
+'''PSUEDO CODE FOR FUNCTIONS TO CODE LATER'''
 
 '''
 
@@ -389,6 +389,18 @@ def eigdecomp(matrix):
 
 '''
 def svd(matrix):
+
+    vmatric = multiply(a transpose, a)
+    umatric = multiply(a, a transpose)
+
+    # eigvals r same for ata and aat, so we will just use ata
+
+    sig = makediagmatrix(eigvals(vmatric))
+
+    v = eigenvectors(vmatric)
+    u = eigenvectors(umatrix)
+
+    return 
 
 
 '''
@@ -419,15 +431,15 @@ def rankk_approx(matrix)
 #     [1,-1,1,0]
 # ]
 
-a = [
-    [1,0,0],
-    [0,0,0],
-    [0,0,1]
-]
+# a = [
+#     [1,0,0],
+#     [0,0,0],
+#     [0,0,1]
+# ]
 
-b = mp.solve_homogeneous(a)
+# b = mp.solve_homogeneous(a)
 
-print(b)
+# print(b)
 
 # h = mp.make_identity(10)
 # h = mp.matrix_by_scalar(h, 6.231)
