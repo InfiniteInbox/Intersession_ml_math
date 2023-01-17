@@ -285,12 +285,20 @@ def qrdecomp(matrix):
         else:
             uactive = column
             for oldu in ulist:
+                print(uactive)
 
-                inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
+                if euclidean_norm(oldu) == 0:
+                    inprodscalar = (dot(oldu, column))
+                else:
+                    inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
                 projected = mp.row_by_scalar(oldu, inprodscalar)
                 uactive = mp.subtract_row(uactive, projected)
 
-        norm = 1/(euclidean_norm(uactive))
+        
+        if euclidean_norm(uactive) == 0:
+            norm = 1
+        else:
+            norm = 1/(euclidean_norm(uactive))
         e = mp.row_by_scalar(uactive, norm)
 
         ulist.append(uactive)
@@ -447,6 +455,10 @@ a =[
 a = mp.multiply_matrix(a, mp.transpose(a))
 
 q, r = qrdecomp(a)
+
+for row in q:
+    print(row)
+
 
 
 
