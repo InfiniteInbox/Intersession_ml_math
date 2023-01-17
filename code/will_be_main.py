@@ -375,6 +375,8 @@ def eigvecs(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
 
     return eigvec_dict
 
+
+
 a  = [
     [12,-51,4,4,6,7,1,2,9,12],
     [6,167,-68,23,12,34,12,3,12,3],
