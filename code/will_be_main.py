@@ -375,16 +375,28 @@ def eigvecs(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
 
     return eigvec_dict
 
-def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
+def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=False):
 
     eigvec_dict = eigvecs(matrix, eigvalitr, eigvaltol, vec_tol)
 
     p = list()
     d = list()
 
+    i = 0
     for eigval, eigvec in eigvec_dict.items():
-        d.append(3)
 
+        if normalize == True:
+            scalar = euclidean_norm(eigvec[0])
+            eigvec = mp.matrix_by_scalar(eigvec, (1/scalar))
+
+        d.append([0 if idx != i else eigval for idx in range(len(matrix))])
+        p.append(eigvec[0])
+        i += 1
+
+    p = mp.transpose(p)
+    pinv = mp.inverse(p)
+    
+    return p, d, pinv
 
 
 a  = [
@@ -399,6 +411,16 @@ a  = [
     [2,4,5,1,98,34,1,23,12,65],
     [0,1,1,2,3,5,8,13,21,34]
 ]
+
+# a = [
+#     [2,1],
+#     [1,2]
+# ]
+
+p, d, pinv = eigendecomp(a, normalize=True)
+
+for row in pinv:
+    print(row)
 
 '''
 (140.60436929398335+18.87897367018305j)
