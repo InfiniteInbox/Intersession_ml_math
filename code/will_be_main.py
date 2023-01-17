@@ -280,6 +280,7 @@ def qrdecomp(matrix):
     ulist = list()
     for idx, column in enumerate(matrix):
         if idx == 0:
+            print("oog")
             uactive = column
         else:
             uactive = column
@@ -375,7 +376,7 @@ def eigvecs(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
 
     return eigvec_dict
 
-def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=False):
+def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
 
     eigvec_dict = eigvecs(matrix, eigvalitr, eigvaltol, vec_tol)
 
@@ -398,29 +399,89 @@ def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=
     
     return p, d, pinv
 
+def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
 
-a  = [
-    [12,-51,4,4,6,7,1,2,9,12],
-    [6,167,-68,23,12,34,12,3,12,3],
-    [-4,24,-41,12,3,4,3,5,12,3],
-    [21,3,4,12,3,4,12,3,4,1],
-    [12,3,4,1,2,3,5,-6,12,-6],
-    [123,4,6,2,3,-6,4,2,3,1],
-    [23,4,2,876,1,24,-8,-2,3,71],
-    [0,23,4,-3,-8,4,6,12,5,9],
-    [2,4,5,1,98,34,1,23,12,65],
-    [0,1,1,2,3,5,8,13,21,34]
-]
+    v, d, useless = eigendecomp((mp.multiply_matrix(mp.transpose(a), a)), normalize)
+    u = eigendecomp((mp.multiply_matrix(a, mp.transpose(a))), normalize)[0]
+
+    sig = list()
+
+    for idx in range(len(matrix)):
+        sig.append([0 if idx != i else ((d[idx][idx])**(1/2)) for i in range(len(d[idx]))])
+    
+    return u, sig, mp.transpose(v)
+
+    # eigvecs(mp.multiply_matrix(mp.transpose(a), a))
+    # eigvecs(mp.multiply_matrix(a, mp.transpose(a)))
+
+# a  = [
+#     [12,-51,4,4,6,7,1,2,9,12],
+#     [6,167,-68,23,12,34,12,3,12,3],
+#     [-4,24,-41,12,3,4,3,5,12,3],
+#     [21,3,4,12,3,4,12,3,4,1],
+#     [12,3,4,1,2,3,5,-6,12,-6],
+#     [123,4,6,2,3,-6,4,2,3,1],
+#     [23,4,2,876,1,24,-8,-2,3,71],
+#     [0,23,4,-3,-8,4,6,12,5,9],
+#     [2,4,5,1,98,34,1,23,12,65],
+#     [0,1,1,2,3,5,8,13,21,34]
+# ]
 
 # a = [
 #     [2,1],
 #     [1,2]
 # ]
 
-p, d, pinv = eigendecomp(a, normalize=True)
+# a = [
+#     [1,0,1],
+#     [-2,1,0]
+# ]
 
-for row in pinv:
-    print(row)
+a =[
+    [2,4],
+    [1,3],
+    [0,0],
+    [0,0]
+]
+
+a = mp.multiply_matrix(a, mp.transpose(a))
+
+q, r = qrdecomp(a)
+
+
+
+# u, sig, vt = svd(a)
+
+# for row in u:
+#     print(row)
+
+# print("#######")
+
+# for row in sig:
+#     print(row)
+
+# print("#######")
+
+# for row in vt:
+#     print(row)
+
+# print("#######")
+
+# ufixed = [
+#     [-0.4472135954999579, 0.8944271909999159],
+# [0.8944271909999159, 0.4472135954999579]
+# ]
+
+# vtfixed = [
+#     [0.9128709291752768, -0.3651483716701107, 0.18257418583505536],
+# [0.0, 0.4472135954999579, 0.8944271909999159],
+# [-0.4082482904638631, -0.8164965809277261, 0.4082482904638631]
+# ]
+
+# g = mp.multiply_matrix(mp.multiply_matrix(u, sig), vt)
+
+# for row in g:
+#     print(row)
 
 '''
 (140.60436929398335+18.87897367018305j)
