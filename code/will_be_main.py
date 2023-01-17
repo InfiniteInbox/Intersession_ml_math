@@ -375,6 +375,16 @@ def eigvecs(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
 
     return eigvec_dict
 
+def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
+
+    eigvec_dict = eigvecs(matrix, eigvalitr, eigvaltol, vec_tol)
+
+    p = list()
+    d = list()
+
+    for eigval, eigvec in eigvec_dict.items():
+        d.append(3)
+
 
 
 a  = [
@@ -407,11 +417,10 @@ a  = [
 #     [1,3]
 # ]
 
-g = eigvecs(a)
+# g = eigvecs(a)
 
-for k, v in g.items():
-    print(f"{k}: {v}")
-
+# for k, v in g.items():
+#     print(f"{k}: {v}")
 
 
 # size= len(a)
