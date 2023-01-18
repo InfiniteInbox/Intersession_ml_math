@@ -271,6 +271,9 @@ def isuppertriangle(matrix, tolerance=6):
     return True
 
 def qrdecomp(matrix):
+
+    if mp.rank(matrix) != len(matrix):
+        raise ValueError("Matrix is rank deficient and cannot be QR Decomposed")
     
     matrix = mp.transpose(matrix)
 
@@ -280,25 +283,18 @@ def qrdecomp(matrix):
     ulist = list()
     for idx, column in enumerate(matrix):
         if idx == 0:
-            print("oog")
             uactive = column
         else:
             uactive = column
             for oldu in ulist:
-                print(uactive)
 
-                if euclidean_norm(oldu) == 0:
-                    inprodscalar = (dot(oldu, column))
-                else:
-                    inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
+                inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
                 projected = mp.row_by_scalar(oldu, inprodscalar)
                 uactive = mp.subtract_row(uactive, projected)
 
         
-        if euclidean_norm(uactive) == 0:
-            norm = 1
-        else:
-            norm = 1/(euclidean_norm(uactive))
+
+        norm = 1/(euclidean_norm(uactive))
         e = mp.row_by_scalar(uactive, norm)
 
         ulist.append(uactive)
@@ -410,13 +406,21 @@ def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=
 def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
 
     v, d, useless = eigendecomp((mp.multiply_matrix(mp.transpose(a), a)), normalize)
-    u = eigendecomp((mp.multiply_matrix(a, mp.transpose(a))), normalize)[0]
+    # u = eigendecomp((mp.multiply_matrix(a, mp.transpose(a))), normalize)[0]
 
+    v = mp.matrix_by_scalar(v, -1)
+    u = list()
     sig = list()
 
     for idx in range(len(matrix)):
         sig.append([0 if idx != i else ((d[idx][idx])**(1/2)) for i in range(len(d[idx]))])
     
+    for idx in range(len(sig)):
+        u_idx = mp.multiply_matrix(matrix, mp.transpose([mp.get_col(v, idx)]))
+        u_idx = mp.matrix_by_scalar(u_idx, 1/sig[idx][idx])
+        u.append(mp.transpose(u_idx)[0])
+    u = mp.transpose(u)
+
     return u, sig, mp.transpose(v)
 
     # eigvecs(mp.multiply_matrix(mp.transpose(a), a))
@@ -435,6 +439,12 @@ def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
 #     [0,1,1,2,3,5,8,13,21,34]
 # ]
 
+a =[
+    [1,2,8],
+    [1,2,7],
+    [1,2,3]
+]
+
 # a = [
 #     [2,1],
 #     [1,2]
@@ -445,43 +455,60 @@ def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
 #     [-2,1,0]
 # ]
 
+# a =[
+#     [2,4],
+#     [1,3],
+#     [0,0],
+#     [0,0]
+# ]
+
+# a = [
+#     [1,2,8],
+#     [1,2,3],
+#     [1,2,7]
+# ]
+
+# q,r = qrdecomp(a)
+
+# for row in r:
+#     print(row)
+
+# a = mp.multiply_matrix(a, mp.transpose(a))
+
+# q, r = qrdecomp(a)
+
+# for row in q:
+#     print(row)
+
 a =[
-    [2,4],
-    [1,3],
-    [0,0],
-    [0,0]
+    [1,2,8],
+    [1,2,7],
+    [1,2,3]
 ]
 
-a = mp.multiply_matrix(a, mp.transpose(a))
+u, sig, vt = svd(a)
 
-q, r = qrdecomp(a)
-
-for row in q:
+for row in u:
     print(row)
 
+print("#######")
 
+for row in sig:
+    print(row)
 
+print("#######")
 
-# u, sig, vt = svd(a)
+for row in vt:
+    print(row)
 
-# for row in u:
-#     print(row)
+print("#######")
 
-# print("#######")
-
-# for row in sig:
-#     print(row)
-
-# print("#######")
-
-# for row in vt:
-#     print(row)
-
-# print("#######")
+for row in mp.multiply_matrix(mp.multiply_matrix(u, sig), vt):
+    print(row)
 
 # ufixed = [
-#     [-0.4472135954999579, 0.8944271909999159],
-# [0.8944271909999159, 0.4472135954999579]
+#     [0.4472135954999579, 0.8944271909999159],
+# [-0.8944271909999159, 0.4472135954999579]
 # ]
 
 # vtfixed = [
@@ -490,7 +517,9 @@ for row in q:
 # [-0.4082482904638631, -0.8164965809277261, 0.4082482904638631]
 # ]
 
-# g = mp.multiply_matrix(mp.multiply_matrix(u, sig), vt)
+# vtfixed = mp.matrix_by_scalar(vtfixed, -1)
+
+# g = mp.multiply_matrix(mp.multiply_matrix(ufixed, sig), vtfixed)
 
 # for row in g:
 #     print(row)

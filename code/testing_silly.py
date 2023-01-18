@@ -489,6 +489,12 @@
 
 # c = 3 * g
 
-a = 2+1j
 
-print(a**(1/2))
+import matrices as mp
+
+a = [
+    [1,2],
+    [3,4]
+]
+
+print(mp.get_col(a, 0))
