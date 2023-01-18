@@ -55,8 +55,7 @@ INPUT AND DATA TYPES:
 
 #################### DEPENDENCIES ####################
 
-import matrices as mp
-import trig
+import basic_matrix_ops as mp
 import copy
 
 #################### GLOBAL VARS ####################
@@ -142,12 +141,7 @@ class sub_space:
         else:
             basis = self.basis  # we don't want to fuck with self.basis
 
-        if self.isorthonormal: # if the basis vecs r orthonormal, there is a special formula
-            return mp.multiply_matrix(basis, mp.transpose(basis)) # we return the projection matrix
-
-        else: # otherwise, we must use the longer forumular
-            psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis)) # we use da formula O(n**#)
-            return mp.multiply_matrix(basis, psueod_inv) # O(n**3)
+        return find_projection_mat(self.basis)
     
 class LinearMapping:
 
@@ -242,6 +236,13 @@ def project_vector(vector, proj_mat, return_error=False):
     else:
         return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
 
+def proj_to_affine(basis_vectors, vec_to_proj, offset):
+
+    pmat = find_projection_mat(basis_vectors)
+    newvec_wo_offset = project_vector(vec_to_proj, pmat)
+
+    return mp.subtract_rows(newvec_wo_offset, mp.row_by_scalar(offset, -1))
+
 def make_onb(basisvectors, columned=False):
     # we will iteratively implement the Graham Schmidt orthogonalization Al Gore ithm 
 
@@ -258,8 +259,6 @@ def make_onb(basisvectors, columned=False):
     
     return newonb
 
-####### qr decomp
-
 def isuppertriangle(matrix, tolerance=6):
 
     for idx, row in enumerate(matrix):
@@ -273,7 +272,7 @@ def isuppertriangle(matrix, tolerance=6):
 def qrdecomp(matrix):
 
     if mp.rank(matrix) != len(matrix):
-        raise ValueError("Matrix is rank deficient and cannot be QR Decomposed")
+        raise ValueError("Matrix is rank deficient and cannot be fully QR Decomposed")
     
     matrix = mp.transpose(matrix)
 
@@ -422,315 +421,3 @@ def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
     u = mp.transpose(u)
 
     return u, sig, mp.transpose(v)
-
-    # eigvecs(mp.multiply_matrix(mp.transpose(a), a))
-    # eigvecs(mp.multiply_matrix(a, mp.transpose(a)))
-
-# a  = [
-#     [12,-51,4,4,6,7,1,2,9,12],
-#     [6,167,-68,23,12,34,12,3,12,3],
-#     [-4,24,-41,12,3,4,3,5,12,3],
-#     [21,3,4,12,3,4,12,3,4,1],
-#     [12,3,4,1,2,3,5,-6,12,-6],
-#     [123,4,6,2,3,-6,4,2,3,1],
-#     [23,4,2,876,1,24,-8,-2,3,71],
-#     [0,23,4,-3,-8,4,6,12,5,9],
-#     [2,4,5,1,98,34,1,23,12,65],
-#     [0,1,1,2,3,5,8,13,21,34]
-# ]
-
-a =[
-    [1,2,8],
-    [1,2,7],
-    [1,2,3]
-]
-
-# a = [
-#     [2,1],
-#     [1,2]
-# ]
-
-# a = [
-#     [1,0,1],
-#     [-2,1,0]
-# ]
-
-# a =[
-#     [2,4],
-#     [1,3],
-#     [0,0],
-#     [0,0]
-# ]
-
-# a = [
-#     [1,2,8],
-#     [1,2,3],
-#     [1,2,7]
-# ]
-
-# q,r = qrdecomp(a)
-
-# for row in r:
-#     print(row)
-
-# a = mp.multiply_matrix(a, mp.transpose(a))
-
-# q, r = qrdecomp(a)
-
-# for row in q:
-#     print(row)
-
-a =[
-    [1,2,8],
-    [1,2,7],
-    [1,2,3]
-]
-
-u, sig, vt = svd(a)
-
-for row in u:
-    print(row)
-
-print("#######")
-
-for row in sig:
-    print(row)
-
-print("#######")
-
-for row in vt:
-    print(row)
-
-print("#######")
-
-for row in mp.multiply_matrix(mp.multiply_matrix(u, sig), vt):
-    print(row)
-
-# ufixed = [
-#     [0.4472135954999579, 0.8944271909999159],
-# [-0.8944271909999159, 0.4472135954999579]
-# ]
-
-# vtfixed = [
-#     [0.9128709291752768, -0.3651483716701107, 0.18257418583505536],
-# [0.0, 0.4472135954999579, 0.8944271909999159],
-# [-0.4082482904638631, -0.8164965809277261, 0.4082482904638631]
-# ]
-
-# vtfixed = mp.matrix_by_scalar(vtfixed, -1)
-
-# g = mp.multiply_matrix(mp.multiply_matrix(ufixed, sig), vtfixed)
-
-# for row in g:
-#     print(row)
-
-'''
-(140.60436929398335+18.87897367018305j)
-(140.60436929398335-18.87897367018305j)
--101.11460777606418
-59.02591771013268
-(-43.66795120077649+13.277929689248026j)
-(-43.66795120077649-13.277929689248026j)
-42.48445591558337
--26.148751028128796
-21.65112105816083
-6.229027933896394'''
-
-# a = [
-#     [4,2],
-#     [1,3]
-# ]
-
-# g = eigvecs(a)
-
-# for k, v in g.items():
-#     print(f"{k}: {v}")
-
-
-# size= len(a)
-# eigval = (140.60436929398335+18.87897367018305j)
-# idt = mp.make_identity(size)
-# idt = mp.matrix_by_scalar(idt, eigval)
-# # for row in idt:
-# #     print(row)
-# subtracted_mat = mp.subtract_matrices(a, idt)
-
-# # for row in subtracted_mat:
-# #     print(row)
-
-# g = mp.echelon(subtracted_mat)
-# g = mp.mround(g, 4)
-# for row in g:
-#     print(row)
-# # 
-
-
-
-# print(mp.matrix_det(g))
-
-# for row in mp.mround(mp.rref(g),4):
-#     print(row)
-
-# sln = mp.solve_homogeneous(g)
-
-# print(sln)
-
-# print(round(d, 6))
-# subtracted_mat = mp.mround(subtracted_mat, 6)
-
-# for row in mp.mround(mp.echelon(subtracted_mat), 3):
-#     print(row)
- 
-
-# b = eigvecs(a)
-
-# print(b)
-
-'''PSUEDO CODE FOR FUNCTIONS TO CODE LATER'''
-
-'''
-
-def eigdecomp(matrix):
-
-    eigvecs(matrix)
-
-    create diag mat with eigvals
-     
-    create p with eigvecs
-
-    create p^-1 given p
-
-    return p, d, p^-1
-'''
-
-'''
-def svd(matrix):
-
-    vmatric = multiply(a transpose, a)
-    umatric = multiply(a, a transpose)
-
-    # eigvals r same for ata and aat, so we will just use ata
-
-    sig = makediagmatrix(eigvals(vmatric))
-
-    v = eigenvectors(vmatric)
-    u = eigenvectors(umatrix)
-
-    return 
-
-
-'''
-
-'''
-def rankk_approx(matrix)
-
-
-'''
-
-# a  = [
-#     [12,-51,4,4,6,7,1,2,9,12],
-#     [6,167,-68,23,12,34,12,3,12,3],
-#     [-4,24,-41,12,3,4,3,5,12,3],
-#     [21,3,4,12,3,4,12,3,4,1],
-#     [12,3,4,1,2,3,5,-6,12,-6],
-#     [123,4,6,2,3,-6,4,2,3,1],
-#     [23,4,2,876,1,24,-8,-2,3,71],
-#     [0,23,4,-3,-8,4,6,12,5,9],
-#     [2,4,5,1,98,34,1,23,12,65],
-#     [0,1,1,2,3,5,8,13,21,34]
-# ]
-
-# a = [
-#     [0,-1,1,1],
-#     [-1,1,-2,3],
-#     [2,-1,0,0],
-#     [1,-1,1,0]
-# ]
-
-# a = [
-#     [1,0,0],
-#     [0,0,0],
-#     [0,0,1]
-# ]
-
-# b = mp.solve_homogeneous(a)
-
-# print(b)
-
-# h = mp.make_identity(10)
-# h = mp.matrix_by_scalar(h, 6.231)
-
-# b = mp.subtract_matrices(a, h)
-
-# print(mp.matrix_det(b))
-
-# g = eigvals(a, 4000, 3)
-
-# for val in g:
-#     print(val)
-
-
-# q, r =  qrdecomp(a)
-
-# q = mp.mround(q, 3)
-
-# for row in q:
-#     print(row)
-
-# for val in a_eigs:
-#     print(val)
-
-
-# b = [[0.0, -0.8660254037844385, -0.4082482904638624, -0.28867513459481053],
-# [-0.4082482904638631, 0.28867513459481275, -0.8164965809277263, 0.2886751345948111],
-# [0.8164965809277261, 0.288675134594813, -0.40824829046386313, -0.2886751345948134],
-# [0.4082482904638631, -0.28867513459481275, 1.8129866073473576e-16, 0.8660254037844398]]
-
-# c = mp.mround(mp.rref(b), 4)
-
-
-
-# q, r = qrdecomp(a)
-
-# for row in q:
-#     print(row)
-# print("#################")
-# for row in mp.mround(r, 4):
-#     print(row)
-# print("#################")
-# for row in mp.multiply_matrix(q,r):
-#     print(row)
-
-# c = eigvals(a, 1900)
-
-# for val in c:
-#     print(val)
-
-# a  = [
-#     [2,3,1,0.5,4],
-#     [4,5,7,0.1,1],
-#     [5,3,6,19.2,9],
-#     [1,4,1,4,7],
-#     [3,1,6,2,6]
-# ]
-
-# a = [
-#     [2,3,1,0.5,4],
-#     [4,5,7,0.1,1],
-#     [5,3,6,19.2,9],
-#     [1,4,1,4,7],
-#     [3,1,6,2,6]
-# ]
-
-# h = eigvals(a,500)
-
-# for row in h:
-#     print(row)
-
-
-
-
-
-
-
-############## STASH
