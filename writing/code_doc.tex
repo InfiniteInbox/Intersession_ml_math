@@ -566,9 +566,7 @@ def inverse(matrix):
 \subsection{Multiplying Two Matrices}
 
 Multiplying two matrices is an elementary operation and the method to computing it is by multiplying the 1st row vector of the first Matrix by the 1st column vector of the second matrix. 
-Therefore, if the dimensionality of the column of the first matrix does not match the row of the second matrix, they cannot be multiplied.
-r * c  * 
-
+Therefore, if the dimensionality of the column of the first matrix does not match the row of the second matrix, they cannot be multiplied. The resulting dimensionality is the row of the first matrix by the column of the second matrix.
 \begin{eqnarray*}
     A & = & \begin{bmatrix}
         A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
@@ -584,6 +582,55 @@ r * c  *
     \end{bmatrix}
 \end{eqnarray*}
 
+\begin{lstlisting}
+    def multiply_matrix(matrix1, matrix2):
+
+    # the first one goes second
+
+    '''this function multiplies two matrices together
+    it takes each row and multiplies it by the column in the next row'''
+
+    # matrix1 row and column number. len() is O(1), constant time
+    matrix2_rows = len(matrix2) 
+    matrix2_cols = len(matrix2[0]) # just taking the first. I assume that each argument is a completely filled list
+
+    # matrix2 row and column number. still constant time
+    matrix1_rows = len(matrix1)
+    matrix1_cols = len(matrix1[0])
+
+    # makes sure that we can indeed mutliply these two matrices - that is, their dimensions must be compatible
+    if (matrix2_rows == matrix1_cols) or (matrix2_cols == matrix1_rows): 
+
+        # if mat1 rows and mat2 cols are equal we switch them so the following code works
+        if (matrix2_rows == matrix1_cols):
+            matrix2, matrix1 = matrix1, matrix2
+
+        new_matrix = [] # making a new matrix to hold values
+
+        # iterates through each row of the first matrix
+        for m2_row in matrix2: # this line alone is O(n)
+            new_matrix_row = [] # O(1) creating a new list for just the row we are doing
+            for _index in range(len(matrix1[0])): # this line is O(n)
+
+                '''teh following, as a whole, is O(n) we will mutliply the the two rows,
+                except that one of these these "rows" should be a column
+                so we will use get_col() to grab it and pass it as an argument. 
+                this si '''
+                new_matrix_row.append(multip_1row( # O(n)
+                    m2_row,
+                    get_col(matrix1, _index) # O(n)
+                ))
+            
+            new_matrix.append(new_matrix_row) # addif the new row to a the full matrix
+
+        return new_matrix # we will return
+
+    else: # raises the error 
+        raise ValueError("The dimensions of the arrays passed as \
+        arguments are incompatible and cannot be multiplied")
+    
+    # full time O(n**3)
+\end{lstlisting}
 
 \section{Vector(Sub)Spaces Pythonically}
 
