@@ -1028,6 +1028,24 @@ def qrdecomp(matrix):
 
 \subsection{Finding Eigenvalues and Eigenvectors Of A Matrix}
 
+We can use the QR decomposition to determine the eigenvalues of a matrix. This is much more efficient than attempting to solve the characteristic polynomial when it comes to a large matrices. 
+
+We are able to use the QR decomposition by exploiting the fact that similar matrices will have the same eigenvalues (consult Google for more information).
+
+Essentially, by finding the QR decomposition, finding a new matrix of $R\dot Q$, and further reducing that into QR form. Eventually, what is given by $R\dot Q$ will converge to an upper triangle matrix. 
+It is a fact that the eigenvalues of an upper triangle matrix are its diagonals. Therefore, the eigenvalues of the original matrix will be the eigenvalues of the upper triangle matrix we converge to by iterating through QR decomps. 
+
+It should be noted that for matrices with complex solutions, we will not end up converging to an upper triangle matrix, but rather to an upper triangle matrix with a few seemingly random entires on the bottom half. 
+We can use the entries to determine what the complex eigenvalues are. 
+
+code here
+
+Next, we will find the eigenvectors by using the eigenvalues and solving the homogeneous system of equations, $(A-\lambda I)x = 0$  where $x$ is the eigenvector associated with $\lambda$. 
+
+We simply iterate through the eigenvalues.
+
+code 
+
 \subsection{Finding the Eiegendecomposition}
 
 \subsection{Finding the Singular Value Decomposition}
