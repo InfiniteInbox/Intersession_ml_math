@@ -399,7 +399,7 @@ It it is easy to turn a matrix in echelon form into one in row-echelon, as we mu
 
 This is an extension of the REF form, where the intended result is 1 along the diagonal and zeros above and below the diagonal with constants on the rightmost column.
 We do this by performing elementary row operations on a matrix from the row below to the row above to eliminate the constant terms with the exception of the diagonal. 
-This method of elementary row operations
+This method of elementary row operations is called Gaussian Elimination.
 \begin{eqnarray*}
     A & = & \begin{bmatrix}
         1  & A_{1,2} & ... & A_{1,j}\\
@@ -414,6 +414,53 @@ This method of elementary row operations
         0 & 0 & ... & 1
     \end{bmatrix}
 \end{eqnarray*}
+
+\begin{lstlisting}
+    def rref(matrix):
+
+    # takes matrix of form outlined in flowerbox
+    # returns matrix of form outlined in flowerbox, but in rref form
+
+    # builds off of the ref function, which produces an upper triangle such that the leading elements of each row is 1
+    # rref returns a matrix such that all diagonals are 1 (which is true in ref) but also as many other elements as possible are 0
+
+    matrix = ref(matrix) # we apply ref to the matrix to make sure it is in the appropriate form
+    mindim = min(len(matrix), len(matrix[0])) # the minimum dimension of the matrix
+
+    for idx in reversed(range(mindim)): 
+        # for above: we wantt to work up from the bottom of the matrix, and will only use values that could have a pivot
+        '''in other words, if 
+        a = [
+        [1,3,8],
+        [12,3,4],
+        [16,7,1],
+        [2,1,6],
+        [12,4,5],
+        [7,2,5]
+        ]
+        then only the top 3 rows will have good pivots
+
+        O(n)
+        '''
+        if matrix[idx][idx] != 0: # we know that where pivots should be will only be 0s or 1s becuase of calling ref
+                                    # if it is not a one and is a 0, then we will not evaluate and will just skip in
+  
+            for idx2 in reversed(range(idx)): # we then iterate through all above rows O(n)
+                
+                # here we find what we shoudl multiply matrix[idx] by to subtract it from matrix[idx2]
+                # and then we simply run through that subtraction
+         
+                scalar = matrix[idx2][idx]  # O(1)
+                subtractant = row_by_scalar(matrix[idx], scalar) #O(n)
+                row_to_sub_from = matrix[idx2] #(1)
+                subbed_row = subtract_row(row_to_sub_from, subtractant) # O(n)
+    
+                matrix[idx2] = subbed_row # O(1)
+    
+    return matrix
+
+    # Full time O(n**3)
+\end{lstlisting}
 
 \subsection{Finding Pivot Columns}
 
@@ -517,6 +564,11 @@ def inverse(matrix):
 \end{lstlisting}
 
 \subsection{Multiplying Two Matrices}
+
+Multiplying two matrices is an elementary operation and the method to computing it is by multiplying the 1st row vector of the first Matrix by the 1st column vector of the second matrix. 
+Therefore, if the dimensionality of the column of the first matrix does not match the row of the second matrix, they cannot be multiplied.
+
+
 
 \section{Vector(Sub)Spaces Pythonically}
 
