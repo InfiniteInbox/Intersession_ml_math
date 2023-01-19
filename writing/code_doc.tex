@@ -460,6 +460,34 @@ and check all prior elements to make sure they are 0's to account for non-square
 
 \subsection{Finding the Determinant}
 
+The determinant is an extremely important scalar quality that provides information about a given matrix. 
+It essentially gives the signed area of the parallelepiped that is represented by the columns or rows of a matrix. 
+If the determinant is 0, it tells us that the area is 0 and therfore the matrix is not of full rank.
+
+There are many methods to find the determinant. First, we can use Laplace Expansion to recursively break down a matrix into small dimensions
+and calculate the determinants of such smaller matrices. 
+
+However, Laplace expansion is very slow; it is much faster to use an alternative method to solve for the determinant. 
+We can leverage two facts to land on a faster method. First, if we subtract a multiple of a row from another row, 
+we do not change the value of the determinant. Second, the determinant of a matrix in triangle-form is the product of its diagonal elements. 
+
+These two understandings let us know that by converting a matrix to Echelon form, we can easily find it's determinant by multiplying the diagonal elements.
+
+\begin{lstlisting}
+
+def matrix_det(matrix):
+
+    matrix = echelon(matrix)
+
+    det = 1
+    for idx in len(matrix):
+        det = det * matrix[idx][idx] # multiply all of the diagonal elements
+
+    return det
+
+\end{lstlisting}
+
+
 \subsection{Inverting a Matrix}
 
 \subsection{Multiplying Two Matrices}
