@@ -1162,6 +1162,36 @@ We simply iterate through the eigenvalues.
 \subsection{Finding the Eiegendecomposition}
 
 To find the Eiegendecomposition, we can use the eiegenvectors function we have from earlier to compute the decomposition.
+Then create the basis matrix with eiegenvectors (P). Then we employ the forumla where A is the orginal matrix:
+\\
+$P^{-1}AP$
+\\
+This will be integral to the Singular Value Decomposition
+
+\begin{lstlisting}
+    def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
+
+    eigvec_dict = eigvecs(matrix, eigvalitr, eigvaltol, vec_tol)
+
+    p = list()
+    d = list()
+
+    i = 0
+    for eigval, eigvec in eigvec_dict.items():
+
+        if normalize == True:
+            scalar = euclidean_norm(eigvec[0])
+            eigvec = mp.matrix_by_scalar(eigvec, (1/scalar))
+
+        d.append([0 if idx != i else eigval for idx in range(len(matrix))])
+        p.append(eigvec[0])
+        i += 1
+
+    p = mp.transpose(p)
+    pinv = mp.inverse(p)
+    
+    return p, d, pinv
+\end{lstlisting}
 
 
 \subsection{Finding the Singular Value Decomposition}
