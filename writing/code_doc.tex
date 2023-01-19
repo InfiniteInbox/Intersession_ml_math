@@ -393,9 +393,54 @@ In other words, we can obtain the following, given $ A \in \mathbb{R}^{m\times n
     \end{bmatrix}
 \end{eqnarray*}
 
-It it is easy to turn a matrix in echelon form into one in row-echelon, as we must simply divide 
+It it is easy to turn a matrix in echelon form into one in row-echelon, as we must simply divide by the reciprocal of the diagonal element.
 
-\subsection{Row Reduction: Reduced Row Echelon Form (RREF)}
+\subsection{Row-Reduced Echelon Form}
+
+
+
+\subsection{Finding Pivot Columns}
+
+As we discussed earlier in the RREF (Reduced Row Echelon Form) section, our result from that operation
+is a matrix taken from upper triangle form to one that has ones along its diagonal. In some cases, the matrix has linearly dependent columns,
+in that case, we want to find the index of those columns for all types of matrices, no matter the size. We iterate through each row to find the first appearance of a 1
+and check all prior elements to make sure they are 0's to account for non-square matrices.
+
+\begin{lstlisting}
+    def identify_pivots(mat, rounded=True):
+
+    # takes matrix of form outlined in flowerbox
+    # returns a list of all indexes in which there is a pivot column upon row reducing the input matrix
+
+    # identifies the pivot columns of the matrix by row reducing
+
+    matrix = mat.copy() # we make a copy because otherwise the original matrix is modified and we get fucked
+
+    matrix = ref(matrix) # we run ref to row reduce it. we do not care about full row reduction because that it is trivial in this case
+    
+    if rounded: # this combats error where 0.99999999999 is not read as one, and therefore not read as a pivot
+        matrix = mround(matrix, 12)
+
+    pivot_col_idx_list = [] # we initialize a blank list will contain indexes of pivot cols
+
+    for row in matrix: # we iterate through each row
+        try: # we add a try in case there are no ones in the row
+            first_one = row.index(1) # we find the first appearance of a 1 within the list
+            for idx2 in range(first_one): # we then check if all prior elelements are 0
+                if row[idx2] != 0: # if one is not a 0, we contiknue the loops
+                    continue
+
+            # however, if all elements prior to the first 1 are 0, we will append the index of that 1 to the pivcollist
+            pivot_col_idx_list.append(first_one)
+
+        except: # if there are no ones, it can be infered that there is no pivot column in that row, so we continue
+            continue 
+
+    return pivot_col_idx_list    
+
+    # O(n**2) time
+\end{lstlisting}
+
 
 \subsection{Finding the Determinant}
 
@@ -408,17 +453,29 @@ It it is easy to turn a matrix in echelon form into one in row-echelon, as we mu
 \subsection{General Introduction to Vector Subspaces}
 
 A vector space is special type of a group that contains both an inner and outer
-operation, which are addition and multiplication by a scalar, respectively.
+operation, which are addition and multiplication by a scalar, respectively. Subspaces are, by proxy, spaces that retain the same properties and are a part of the original vector space
 
 Early on, we realized that it was impossible to represent an infinite series of elements as a vector space in python, for example $\mathbb{R}^{2}$. 
 We realized that we would have to have the user to insert a matrix representing that vector space. We created an umbrella class called "subspace".
-These are integral to representing linear mappings pythonically as these serve as our mapping 
+These are integral to representing linear mappings pythonically.
 
-Our subspace class is very broad, the operations done in the class are more of a general operations as stated below
+Our subspace class is very broad, the operations done in the class are more of a general operations as stated below.
 
 \subsection{Issues when Representing Subspaces Pythonically}
 
 As I said earlier, we cannot express common vector spaces used in linear algebra and we had to settle for finite spaces. They would be in the form of:
+
+\begin{eqnarray*}
+    V & = &\begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
+        A_{2,1} & A_{2,2} & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        A_{j,1} & A_{j,2} & ... & A_{j,j}
+    \end{bmatrix}
+    \in \mathbb{R}^{j \times j}
+\end{eqnarray*}
+
+j represents the general dimensionality of the vector space. 
 
 \subsection{Defining a Space with a Basis}
 
@@ -453,9 +510,283 @@ Basis Vector
     \end{bmatrix}
 \end{eqnarray*}
 
+The code to do this involved taking the indexes of the pivot columns from earlier and then mapping those to the original matrix.
+In the example above, the pivot columns would be a list with index [0] since the original matrix's RREF form comes out to be 
+\begin{eqnarray}
+    \begin{bmatrix}
+        1 & 0 & 0 \\
+        0 & 1 & 2 \\
+        0 & 0 & 0
+    \end{bmatrix}
+\end{eqnarray}
+
+\begin{lstlisting}
+    def create_basis(self): 
+
+        # we find the basis of generatign set
+
+        tempgset = self.gset # we create a temporary gset to not modify the original
+
+        if self.columned == False: # if the input generating vectors are row vecs
+            tempgset = mp.transpose(tempgset) # we will make then col vecs
+
+        holder = mp.identify_pivots(tempgset) # now we identify pivots of the generating set, O(n**2)
+
+        return [self.gset[i] for i in holder] # then we will return all of the vectors
+\end{lstlisting}
+
+Then any valid subspace is just the span of the linearly independent basis vectors.
+
+\subsection{Orthonormality of Basis Vectors}
+
+Orthonormality of basis vectors is when basis vectors are the unit vectors (the distance of the vector is 1) and if it is orthogonal (purpendicular).
+We can find this by taking the dot product, a type of inner product defined as $\begin{bmatrix} x & y \end{bmatrix}  \cdot  \begin{bmatrix} a & b \end{bmatrix} = xa + yb$. 
+The following needs to be satisfied: \\
+\\
+            $\langle x \; , \; y \rangle = 0$
+            \\
+            $\langle x \; , \; x \rangle = 1$
+\\
+\\
+Here is our dot product code:
+\begin{lstlisting}
+    def dot(v1, v2):
+    # find the dot product of 2 vectors
+    if not(isinstance(v1[0], list)) and not(isinstance(v2[0], list)) and (len(v1)==len(v2)):
+        # if we find that the vectors are not 1 dimensional or that that they are different sizes
+        total = 0
+        for idx in range(len(v1)):
+        # multiply elementwise
+            total += v1[idx]*v2[idx]
+        
+        return total
+\end{lstlisting}
+
+These are very important to rotations of vectors. 
+Here is our implemenentation of orthonormality:
+\begin{lstlisting}
+    def isorthonormal(self): 
+
+        if self.columned == False: # if the input basis vecs are row vecs, a
+            basis = mp.transpose(self.basis) # we will make them col vecs, but will use a new var to not modify self.basis
+        else:
+            basis = self.basis  # we don't want to fuck with self.basis
+
+        if len(basis) >= 2: # orthonormal must have at least two basis vectors
+            for idx, vec1 in enumerate(basis):  # now we run through each basis vector O(n)
+                for vec2 in basis[idx+1:]: # we run through each other basis vecor
+                    if (dot(vec1, vec2) != 0) or (dot(vec1, vec1) != 1): # if any of them do not pass the test (<v1,v2> = 0 or <v1,v1> =1) (dot defined lower)
+                        return False # then we will return False because all must pass the test
+                
+            return True # otherwise, if False not returned yet, we know it to be true
+        
+        else: return False # if only one basis vec, nothing to be orthonormal to
+\end{lstlisting}
+
+
+
 \section{Representing Linear Mappings Pythonically}
 
+As stated earlier, we would use the user inputted matrix representations of a vector space (generating set) and get a collection of basis vectors.
+A linear mapping is a function that maps between 2 vector spaces and also prserves the following rules:
+\\
+\\
+            $T: x \rightarrow y$
+\\
+\\
+            $T(x + y) = T(x) + T(y)$
+            \\
+            $T(ax) = aT(x)$
+\\
+\\
+
+where T is a function linearly mapping vector space x to y. In the case of a code application, these would be finite vector spaces.
+To map a vector from one space to another, we need to find the transition matrix from the basis vectors we are converting with, which could even be 2 bases for each vector space. 
+We will cover that code in the next section. Assuming we have the transition matrix, you can multiply that to the vector to recieve a vector that has been mapped to a new vector space. 
+We can map a given vector with this code:
+
+\begin{lstlisting}
+    def map(self, vector):
+        return self.apply(vector)
+
+  def apply_mapping(self, vector):
+
+    # expects a vector in the domain, not codomain
+    # expects a vector in the domain, not codomain, of the form  vector = [element1, ...., element 2]
+    # will then apply the linear mapping (self.mapping) to the vector
+    # will return the result
+    if len(vector) != self.domain_dim:
+      return "hold up! wait a minute! sumn aint right"
+
+    else:
+      return mp.multiply_matrix(self.mapping, mp.transpose([vector]))
+
+  def is_subspace(self, subspace):
+      # check if subspace is a part of vector_space_1
+      for vector in subspace:
+          if vector not in self.matrix:
+              return False
+      return True
+\end{lstlisting}
+
+We can also check if a given vector space is a subspace by iterating through the original vector space and verifying if each element is in the vector space.
+
+\subsection{Identifying The Type of Linear Mapping}
+
+There are a handful of different ways to classify a mapping. These can tell us useful properties about a mapping:
+\\
+$\phi : J \rightarrow K $
+\\ 
+\\
+Injective if $ \forall x,y \in J: \phi(x) = \phi(y)$
+\\
+Surjective if $ \phi(J) = K $
+\\
+Bijective if both hold
+\\
+\\
+Homomorphism if its a linear mapping
+\\
+Isomorphism if $ \phi : J \rightarrow K$ linear and bijective
+\\
+Endomorphism if $ \phi : J \rightarrow J$ linear
+\\
+Automorphism if $ \phi : J \rightarrow J$ linear and bijective
+
+Our code to do this is listed below:
+\begin{lstlisting}
+    class LinearMapping:
+
+  def __init__(self, A, B, mapping=None):
+    self.domain_basis = [A[i] for i in mp.identify_pivots(mp.transpose(A))]
+    self.domain_dim = len(self.domain_basis)
+    self.codomain_basis = [B[i] for i in mp.identify_pivots(mp.transpose(B))]
+    self.codomain_dim = len(self.codomain_basis)
+    self.domain = [row[:] for row in A]
+    self.codomain = [row[:] for row in B]
+    self.mapping = mapping # needs to be a matrix or None
+    self.injective = True if mp.rank(self.mapping) == len(self.mapping[0]) else False
+    self.surjective = True if mp.rank(self.mapping) == len(self.mapping) else False
+    self.bijective = True if (self.injective == True and self.surjective == True) else False
+    self.homomorphism = True # (by definition, duh)
+    self.isomorphism = True if (self.bijective == True) else False # homomorphism already satisfied
+    self.endomorphism  = True if len(A) == len(B) and len(A[0]) == len(B[0]) else False # True if dim(A) == dim(B) and len(A[0]) == len(B[0]) else False
+    self.automorphism = True if self.endomorphism and self.bijective else False
+\end{lstlisting}
+
+\subsection{More advanced Basis Change}
+
+To find the transformation matrix between basis vectors requires the RREF (Row-Reduced Echelon Form) of the new basis with the older basis vectors, we place the original basis vectors on the left and the desired basis on the right. 
+We then take the right side of the augmented matrix; this can be extended to 2 pairs of bases as shown below:
+\begin{lstlisting}
+    def find_transition(og_base, new_base, columned=False):
+
+    '''
+    TAKES:
+        original basis of subspace, og_base
+        new basis of subspace, new_base
+
+        it is important to pay mind to the shape of these basis vectors. 
+        eg, input [[1,3,4], [1,4,7]] where each sublist is a basis vector will be treated as 3 col vectors, 
+        [1,1], [3,4], and [4,7]. we added the columned flag to help with this
+    '''
+
+    if columned==False:
+        og_base, new_base = transpose(og_base), transpose(new_base)
+
+    # we find a transition matrix that changes the coordinates expressed from one base to another base
+
+    # going from base 1 to base 2
+    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
+
+        dim_to_take = len(og_base[0]) # we find what the dimensions of the transmat will be
+        total = append_mat_right(new_base, og_base) # we create an augmented matrix with new basis on left and old basis on right
+        reduced = rref(total) # row reduce, O(n**3)
+
+        transition_matrix = list() # init our blank transition matrix
+
+        for row in reduced: # we go through the reduced augmat to find what should be added to the transition matrix
+            transition_matrix.append(row[-dim_to_take:])
+
+        return transition_matrix
+    
+    # Full time O(n**3)
+\end{lstlisting}
+$ A'_{\phi} = T^{-1}A_{\phi}S $
+
+Where $\phi : J \rightarrow K$ and ordered bases \\ 
+$ B = (b_{1},...,b_{n})  B' = (b'_{1},...,b'_{n}) $
+\\
+$ C = (c_{1},...,c_{n})  C' = (c'_{1},...,c'_{n}) $
+
+B is a tuple of the basis vectors in that given space and S represents the mapping of coordinate from B to B'.
+T represents the mapping of coordinates from C to C' and $A_{\phi}$ is the Transformation matrix from B to C.
+\begin{lstlisting}
+    def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, columned=False):
+    
+    '''
+    TAKES:
+        the transformation matrix/linmapping, ogtransfmat, of standard form outlined in flowerbox
+        the original basis of domain, ogb1
+        the original basis of codomain, ogb2
+        the new basis of domain, tildab1
+        the new basis of codomain, tildab2
+        AS WITH find_transition, the base inputs can be finicky, the columned flag should help. check that for more indepth docs
+
+    '''
+
+    if columned==False: # we make sure the basis inputs are the correct form ie they are column vectors
+        ogb1, ogb2, tildab1, tildab2 = transpose(ogb1),transpose(ogb2),transpose(tildab1),transpose(tildab2) 
+
+    transition1 = find_transition(tildab1, ogb1) # we find transitino matrix from the new domain basis to the old domain basis, O(n**3)
+    transition2 = inverse(find_transition(tildab2, ogb2)) # we find inverse of transition matrix from new codomain basis to old codomain basis, O(n**3)
+
+    return multiply_matrix(multiply_matrix(transition2, ogtransfmat), transition1) # we multiply the matrices according to formula, O(n**3)
+
+    # full time O(n**3)
+\end{lstlisting}
+
+
+
 \section{More Advanced Matrix Operations}
+
+\subsection{Solving Homogeneous System}
+
+Some matrices contain linearly dependent columns or rows making certain variables "free". We learned about the -1 trick for solving such matrices.
+\begin{lstlisting}
+    def solve_homogeneous(coef_matrix):
+    # takes matrix of form outlined in flowerbox
+    # returns a matrix using the minus 1 trick to solve homogeneous linear systems
+
+    coef_matrix = rref(coef_matrix) # takes the rref of the coefficient matrix (system of linear eq) O(n**3)
+
+    pivotcols = identify_pivots(coef_matrix) # finds the pivot columns of the rref matrix O(n**2)
+    notpiv_cols = list() # since this function is called because of different size dimension matricies, there are going to be necessary added piv-columns
+    for i in range(len(coef_matrix[0])): # iterates through the columns O(n)
+        if i not in pivotcols: # Iterates through the list of pivot columns
+            notpiv_cols.append(i) # appends the non pivot column to the non-pivot col list
+    
+    if notpiv_cols == []: # if the non-pivot columns are empty (in other words had total rank)
+        return [0 for i in range(len(coef_matrix[0]))]
+
+    if len(coef_matrix) == len(coef_matrix[0]):
+
+        for idx in notpiv_cols:
+            coef_matrix[idx][idx] = -1
+        coef_matrix = transpose(coef_matrix)
+        final = [coef_matrix[idx] for idx in notpiv_cols]
+        return final
+
+
+    for idx in notpiv_cols: #Iterate through the non pivot columns
+        coef_matrix.insert(idx, [0 if i != idx else -1 for i in range(len(coef_matrix[0]))]) # by the minus 1 trick, we insert a row with minus 1 in the nth index to preserve diagonality
+    coef_matrix = transpose(coef_matrix) # we transpose the matrix
+    final = [coef_matrix[idx] for idx in notpiv_cols] # we return the solution as a square matrix  
+    return final
+
+    # O(n**3)
+\end{lstlisting}
+
 
 \section{Projections}
 

@@ -421,3 +421,57 @@ def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
     u = mp.transpose(u)
 
     return u, sig, mp.transpose(v)
+
+
+def find_transition(og_base, new_base, columned=False):
+
+    '''
+    TAKES:
+        original basis of subspace, og_base
+        new basis of subspace, new_base
+
+        it is important to pay mind to the shape of these basis vectors. 
+        eg, input [[1,3,4], [1,4,7]] where each sublist is a basis vector will be treated as 3 col vectors, 
+        [1,1], [3,4], and [4,7]. we added the columned flag to help with this
+    '''
+
+    if columned==False:
+        og_base, new_base = mp.transpose(og_base), mp.transpose(new_base)
+
+    # we find a transition matrix that changes the coordinates expressed from one base to another base
+
+    # going from base 1 to base 2
+    if len(og_base) == len(new_base) and len(og_base[0]) == len(new_base[0]):
+
+        dim_to_take = len(og_base[0]) # we find what the dimensions of the transmat will be
+        total = mp.append_mat_right(new_base, og_base) # we create an augmented matrix with new basis on left and old basis on right
+        reduced = mp.rref(total) # row reduce, O(n**3)
+
+        transition_matrix = list() # init our blank transition matrix
+
+        for row in reduced: # we go through the reduced augmat to find what should be added to the transition matrix
+            transition_matrix.append(row[-dim_to_take:])
+
+        return transition_matrix
+
+def change_transformation_basis(ogtransfmat, ogb1, ogb2, tildab1, tildab2, columned=False):
+    
+    '''
+    TAKES:
+        the transformation matrix/linmapping, ogtransfmat, of standard form outlined in flowerbox
+        the original basis of domain, ogb1
+        the original basis of codomain, ogb2
+        the new basis of domain, tildab1
+        the new basis of codomain, tildab2
+        AS WITH find_transition, the base inputs can be finicky, the columned flag should help. check that for more indepth docs
+
+    '''
+
+    if columned==False: # we make sure the basis inputs are the correct form ie they are column vectors
+        ogb1, ogb2, tildab1, tildab2 = mp.transpose(ogb1),mp.transpose(ogb2),mp.transpose(tildab1),mp.transpose(tildab2) 
+
+    transition1 = find_transition(tildab1, ogb1) # we find transitino matrix from the new domain basis to the old domain basis, O(n**3)
+    transition2 = mp.inverse(find_transition(tildab2, ogb2)) # we find inverse of transition matrix from new codomain basis to old codomain basis, O(n**3)
+
+    return mp.multiply_matrix(mp.multiply_matrix(transition2, ogtransfmat), transition1) # we multiply the matrices according to formula, O(n**3)
+
