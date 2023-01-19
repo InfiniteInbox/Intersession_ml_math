@@ -567,7 +567,22 @@ def inverse(matrix):
 
 Multiplying two matrices is an elementary operation and the method to computing it is by multiplying the 1st row vector of the first Matrix by the 1st column vector of the second matrix. 
 Therefore, if the dimensionality of the column of the first matrix does not match the row of the second matrix, they cannot be multiplied.
+r * c  * 
 
+\begin{eqnarray*}
+    A & = & \begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,j}\\
+        A_{2,1} & A_{2,2} & ... & A_{2,j}\\
+        ... & ... & ... & ... \\
+        A_{m,1}& A_{m,2} & ... & A_{m,j}
+    \end{bmatrix} \\     
+    & * & \begin{bmatrix}
+        A_{1,1}  & A_{1,2} & ... & A_{1,m}\\
+        A_{2,1} & A_{2,2} & ... & A_{2,m}\\
+        ... & ... & ... & ... \\
+        A_{j,1}& A_{j,2} & ... & A_{j,m}
+    \end{bmatrix}
+\end{eqnarray*}
 
 
 \section{Vector(Sub)Spaces Pythonically}
