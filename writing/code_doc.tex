@@ -1195,4 +1195,34 @@ This will be integral to the Singular Value Decomposition
 
 \subsection{Finding the Singular Value Decomposition}
 
+To find the SVD, we can take the transpose of the original matrix and multiply them. 
+$A^{T}A$ 
+Then you take the eiegenvalues of that and put it on the diagonals to get the matrix (D) and make all the columns the unit vector to get matrix (P) 
+$PDP^{T}$
+Then you create the singular value matrix which is just the square root of the eiegenvalues placed along the diagonal depending on the rank of the original matrix and must be the same size as the original.
+$PV\sum=A $
+
+\begin{lstlisting}
+    def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
+
+    v, d, useless = eigendecomp((mp.multiply_matrix(mp.transpose(matrix), matrix)), normalize)
+    # u = eigendecomp((mp.multiply_matrix(a, mp.transpose(a))), normalize)[0]
+
+    v = mp.matrix_by_scalar(v, -1)
+    u = list()
+    sig = list()
+
+    for idx in range(len(matrix)):
+        sig.append([0 if idx != i else ((d[idx][idx])**(1/2)) for i in range(len(d[idx]))])
+    
+    for idx in range(len(sig)):
+        u_idx = mp.multiply_matrix(matrix, mp.transpose([mp.get_col(v, idx)]))
+        u_idx = mp.matrix_by_scalar(u_idx, 1/sig[idx][idx])
+        u.append(mp.transpose(u_idx)[0])
+    u = mp.transpose(u)
+
+    return u, sig, mp.transpose(v)
+\end{lstlisting}
+
+
 \end{document}
