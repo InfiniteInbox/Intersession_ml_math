@@ -404,7 +404,7 @@ def eigendecomp(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=
 
 def svd(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4, normalize=True):
 
-    v, d, useless = eigendecomp((mp.multiply_matrix(mp.transpose(a), a)), normalize)
+    v, d, useless = eigendecomp((mp.multiply_matrix(mp.transpose(matrix), matrix)), normalize)
     # u = eigendecomp((mp.multiply_matrix(a, mp.transpose(a))), normalize)[0]
 
     v = mp.matrix_by_scalar(v, -1)
