@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.10)  19 JAN 2023 08:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.1.10)  19 JAN 2023 09:00
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -209,69 +209,69 @@ Underfull \hbox (badness 10000) in paragraph at lines 209--212
  []
 
 [4] [5] [6] [7] [8] [9] [10] [11] [12] [13]
-Underfull \hbox (badness 10000) in paragraph at lines 586--596
+Underfull \hbox (badness 10000) in paragraph at lines 612--622
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 586--596
+Underfull \hbox (badness 10000) in paragraph at lines 612--622
 
  []
 
-[14]
-Overfull \hbox (7.56583pt too wide) in paragraph at lines 632--632
+[14] [15]
+Overfull \hbox (7.56583pt too wide) in paragraph at lines 658--658
 []\OT1/cmr/bx/n/17.28 Representing Lin-ear Map-pings Python-i-cally 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 634--646
+Underfull \hbox (badness 10000) in paragraph at lines 660--672
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 634--646
+Underfull \hbox (badness 10000) in paragraph at lines 660--672
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 634--646
+Underfull \hbox (badness 10000) in paragraph at lines 660--672
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 634--646
+Underfull \hbox (badness 10000) in paragraph at lines 660--672
 
  []
 
-[15]
-Underfull \hbox (badness 10000) in paragraph at lines 680--699
+[16]
+Underfull \hbox (badness 10000) in paragraph at lines 706--725
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 680--699
+Underfull \hbox (badness 10000) in paragraph at lines 706--725
 
  []
 
-[16] [17] [18]
-Overfull \hbox (68.04971pt too wide) in paragraph at lines 783--785
+[17] [18] [19]
+Overfull \hbox (68.04971pt too wide) in paragraph at lines 809--811
 [][][][][][][][][][][][][][][][][][][][]  
  []
 
-[19] [20] [21] (./code_doc.aux) ) 
+[20] [21] [22] (./code_doc.aux) ) 
 Here is how much of TeX's memory you used:
- 4553 strings out of 476093
- 64057 string characters out of 5795583
+ 4555 strings out of 476093
+ 64088 string characters out of 5795583
  1958787 words of memory out of 5000000
- 24912 multiletter control sequences out of 15000+600000
+ 24914 multiletter control sequences out of 15000+600000
  521211 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,12n,62p,327b,1722s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,12n,62p,327b,1726s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on code_doc.pdf (21 pages, 177637 bytes).
+Output written on code_doc.pdf (22 pages, 178560 bytes).
 PDF statistics:
- 132 PDF objects out of 1000 (max. 8388607)
- 84 compressed objects within 1 object stream
+ 135 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

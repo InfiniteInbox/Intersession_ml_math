@@ -490,6 +490,32 @@ def matrix_det(matrix):
 
 \subsection{Inverting a Matrix}
 
+Another incredibly important computation is the ability to find the inverse of a given matrix. The inverse is a matrix that, when multiplied by the original, will produce the 
+identity matrix. In this way, it is useful because we can somewhat simulate division with it. 
+
+The easiest way to find an inverse is to augment the original matrix with an identity matrix such that the original is on the left and the identity is on the right. 
+The, we will row reduce the matrix such that the left hand side is in rref form, or in other words is an identity matrix. What is left on the right hand side is the inverse. 
+
+It should be noted that only square matrices have inverses. 
+
+\begin{lstlisting}
+def inverse(matrix):
+    
+
+    identity = make_identity(len(matrix))
+    dim_to_take = len(matrix[0])
+
+    matrix = append_mat_right(matrix, identity)
+    matrix = rref(matrix)
+
+    inverse = list()
+
+    for row in matrix:
+        inverse.append(row[-dim_to_take:])
+
+    return inverse
+\end{lstlisting}
+
 \subsection{Multiplying Two Matrices}
 
 \section{Vector(Sub)Spaces Pythonically}
@@ -830,8 +856,6 @@ Some matrices contain linearly dependent columns or rows making certain variable
 
     # O(n**3)
 \end{lstlisting}
-
-\subsection{Solving Homogeneous Systems}
 
 \subsection{Finding Eigenvalues and Eigenvectors Of A Matrix}
 
