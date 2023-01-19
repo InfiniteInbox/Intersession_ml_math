@@ -983,7 +983,10 @@ One such decomposition is the QR decomposition, which will ultimately enable us 
 
 In this decomposition, we find a matrix Q that is orthonormal and a matrix R that is in upper-triangle form such that QR is equivalent to the original matrix, A. 
 
-The algorithm to solve for the matrix Q involves the Graham-Schmidt method.
+The algorithm to solve for the matrix Q involves the Graham-Schmidt method. (Consult wikipedia for the full algorithm)
+
+It should be noted that some issues arise when we pass a rank deficient matrix, as finding the QR of such a matrix requires what is known 
+as a "reduced QR Decomp," which we did not code due to time constraints. 
 
 \begin{lstlisting}
 def qrdecomp(matrix):
