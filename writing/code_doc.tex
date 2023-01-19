@@ -971,6 +971,58 @@ Some matrices contain linearly dependent columns or rows making certain variable
     # O(n**3)
 \end{lstlisting}
 
+\subsection{QR Decompositions}
+
+One of the most important ways to manipulate a matrix is to decompose it into other matrices. Doing this can help us understand 
+properties of the original matrix and can let us draw conclusions about the data presented within that matrix. 
+
+Additionally, we can use matrix decompositions to store a matrix of data in smaller matrices - for example, we can greatly reduce the data we need to store
+by using rank-k approximations. 
+
+One such decomposition is the QR decomposition, which will ultimately enable us to find eigenvalues of a matrix.
+
+In this decomposition, we find a matrix Q that is orthonormal and a matrix R that is in upper-triangle form such that QR is equivalent to the original matrix, A. 
+
+The algorithm to solve for the matrix Q involves the Graham-Schmidt method.
+
+\begin{lstlisting}
+def qrdecomp(matrix):
+
+    if mp.rank(matrix) != len(matrix):
+        raise ValueError("Matrix is rank deficient and cannot be fully QR Decomposed")
+    
+    matrix = mp.transpose(matrix)
+
+    q = list()
+    r = list()
+    uactive = None
+    ulist = list()
+    for idx, column in enumerate(matrix):
+        if idx == 0:
+            uactive = column
+        else:
+            uactive = column
+            for oldu in ulist:
+
+                inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
+                projected = mp.row_by_scalar(oldu, inprodscalar)
+                uactive = mp.subtract_row(uactive, projected)
+
+        
+
+        norm = 1/(euclidean_norm(uactive))
+        e = mp.row_by_scalar(uactive, norm)
+
+        ulist.append(uactive)
+        q.append(e)
+
+    q = mp.transpose(q)
+    qinv = mp.inverse(q.copy())
+    r = mp.multiply_matrix(qinv,mp.transpose(matrix))
+    return q,r 
+
+\end{lstlisting}
+
 \subsection{Finding Eigenvalues and Eigenvectors Of A Matrix}
 
 \subsection{Finding the Eiegendecomposition}
