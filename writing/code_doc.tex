@@ -1038,15 +1038,131 @@ It is a fact that the eigenvalues of an upper triangle matrix are its diagonals.
 It should be noted that for matrices with complex solutions, we will not end up converging to an upper triangle matrix, but rather to an upper triangle matrix with a few seemingly random entires on the bottom half. 
 We can use the entries to determine what the complex eigenvalues are. 
 
-code here
+\begin{lstlisting}
+    def qrdecomp(matrix):
+
+    if mp.rank(matrix) != len(matrix):
+        raise ValueError("Matrix is rank deficient and cannot be fully QR Decomposed")
+    
+    matrix = mp.transpose(matrix)
+
+    q = list()
+    r = list()
+    uactive = None
+    ulist = list()
+    for idx, column in enumerate(matrix):
+        if idx == 0:
+            uactive = column
+        else:
+            uactive = column
+            for oldu in ulist:
+
+                inprodscalar = ((dot(oldu, column)) / (euclidean_norm(oldu))**2)
+                projected = mp.row_by_scalar(oldu, inprodscalar)
+                uactive = mp.subtract_row(uactive, projected)
+
+        
+
+        norm = 1/(euclidean_norm(uactive))
+        e = mp.row_by_scalar(uactive, norm)
+
+        ulist.append(uactive)
+        q.append(e)
+
+    q = mp.transpose(q)
+    qinv = mp.inverse(q.copy())
+    r = mp.multiply_matrix(qinv,mp.transpose(matrix))
+    return q,r 
+
+\end{lstlisting}
+
+
 
 Next, we will find the eigenvectors by using the eigenvalues and solving the homogeneous system of equations, $(A-\lambda I)x = 0$  where $x$ is the eigenvector associated with $\lambda$. 
 
 We simply iterate through the eigenvalues.
 
-code 
+\begin{lstlisting}
+    def eigvals(matrix, iterations = 1000, tolerance=6):
+
+    activemat = copy.deepcopy(matrix)
+
+    istriangle = False
+
+    for i in range(iterations):
+    # while not istriangle:
+        q, r = qrdecomp(activemat)
+        activemat = mp.multiply_matrix(r,q)
+
+            # istriangle = isuppertriangle(activemat, tolerance)
+
+
+    # g = isuppertriangle(activemat, tolerance)
+    # return activemat
+
+    if isuppertriangle(activemat, tolerance):
+
+        return mp.diags(activemat)
+
+
+    else:
+
+        eigvals = mp.diags(activemat)
+
+        for idx in range(len(activemat)-1):
+
+            if round(activemat[idx+1][idx], 8) != 0:
+
+                a = activemat[idx][idx]
+                b = activemat[idx][idx+1]
+                c = activemat[idx+1][idx]
+                d = activemat[idx+1][idx+1]
+
+                term1 = -(-a-d)
+                term2 = ((term1**2) - 4*(a*d - b*c))
+                positiveroot = (term1 + term2**(1/2))/2
+                negativeroot = (term1 - term2**(1/2))/2
+
+
+                del eigvals[idx:idx+2]
+                eigvals.insert(idx,positiveroot)
+                eigvals.insert(idx+1,negativeroot)
+
+                idx+=1
+
+        return eigvals
+
+    def eigvecs(matrix, eigvalitr = 1000, eigvaltol = 6, vec_tol = 4):
+
+        eigval_list = eigvals(matrix, eigvalitr, eigvaltol)
+        matrix_size = len(matrix)
+        eigvec_dict = {}
+
+        for eigval in eigval_list:
+            
+            if isinstance(eigval, complex):
+                eigval = (round(eigval.real, eigvaltol) + round(eigval.imag, eigvaltol)*1j)
+            else:
+                eigval = round(eigval, eigvaltol)
+            idt = mp.make_identity(matrix_size)
+            idt = mp.matrix_by_scalar(idt, eigval)
+            subtracted_mat = mp.subtract_matrices(matrix, idt)
+            # subtracted_mat = mp.mround(subtracted_mat, vec_tol)
+            subtracted_mat = mp.echelon(subtracted_mat)
+            subtracted_mat = mp.mround(subtracted_mat, vec_tol)
+
+            sln = mp.solve_homogeneous(subtracted_mat)
+        
+            eigvec_dict[eigval] = sln
+        
+
+        return eigvec_dict
+\end{lstlisting}
 
 \subsection{Finding the Eiegendecomposition}
+
+To find the Eiegendecomposition, we can use the eiegenvectors function we have from earlier to compute the decomposition.
+
 
 \subsection{Finding the Singular Value Decomposition}
 
