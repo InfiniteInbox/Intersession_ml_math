@@ -767,7 +767,37 @@ Here is our implemenentation of orthonormality:
         else: return False # if only one basis vec, nothing to be orthonormal to
 \end{lstlisting}
 
+\subsection{Projections}
 
+Projections are the act of taking a vector from a higher dimensional subspace and projecting it into a lower dimensional space. 
+We use the Gram-Schmidt process; here is our code to do so:
+
+\begin{lstlisting}
+    def find_projection_mat(basis, columned=False):
+
+    # takes a basis, and assumes it is not columned. it must be columnbed for us to continue.
+
+    if columned == False:
+        basis = mp.transpose(basis)
+
+    # is ortho check reserved for object
+
+    psueod_inv = mp.multiply_matrix(mp.inverse(mp.multiply_matrix(mp.transpose(basis), basis)), mp.transpose(basis))
+    return mp.multiply_matrix(basis, psueod_inv)
+
+    def project_vector(vector, proj_mat, return_error=False):
+
+        '''
+        if using sub_space obj, will look like newvec = project_vector(vec, sub_space.proj_mat)
+        '''
+        
+        projected = mp.multiply_matrix(proj_mat, [vector])
+
+        if return_error == False:
+            return projected[0]
+        else:
+            return mp.mround(projected)[0], euclidean_norm(mp.subtract_row(vector, projected[0]))
+\end{lstlisting}
 
 \section{Representing Linear Mappings Pythonically}
 
